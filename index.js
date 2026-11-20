@@ -43,9 +43,21 @@ export function apply(ctx) {
   const attached = new Map()
   const turns = new Map()
   const reviews = new Set()
+  let botHost
   const lifetime = new AbortController()
   let draining = false
   let lastModel = null
+
+  function showPersonaInBotMode(id) {
+    if (!botHost) return
+    const persona = store.persona(id)
+    if (!persona) return
+    try {
+      botHost.openContinuityPersona({ id: persona.id, name: persona.name })
+    } catch {
+      ctx.logger.warn('persona-continuity: Bot mode projection unavailable')
+    }
+  }
 
   function rememberModel(target) {
     if (target?.provider && target?.model) {
@@ -401,12 +413,14 @@ export function apply(ctx) {
         store.bind(session, personaId)
         if (agent) attach(agent)
       })
+      showPersonaInBotMode(personaId)
       enqueueSessionHistory(session, personaId, info)
       return api.state(session)
     },
     save(id, name, instructions, autoMemory) {
       const saved = store.savePersona(id, name, instructions)
       if (autoMemory !== undefined) store.setAutoMemory(saved, autoMemory)
+      showPersonaInBotMode(saved)
       return saved
     },
     autoMemory: (id, enabled) => store.setAutoMemory(id, enabled),
@@ -531,6 +545,29 @@ export function apply(ctx) {
     }
   })
   ctx.effect(() => registerWeb(ctx.connection, api))
+
+  ctx.inject?.(['botharness'], botCtx => {
+    const host = botCtx.botharness
+    if (typeof host?.openContinuityPersona !== 'function' ||
+        typeof host.contributeBotAgentSetup !== 'function') return
+    botCtx.effect(() => {
+      botHost = host
+      for (const persona of store.personas()) showPersonaInBotMode(persona.id)
+      const release = host.contributeBotAgentSetup((_agentCtx, agent, info) => {
+        if (info.rootRole !== 'orchestrator' || !supported(agent.session) ||
+            !info.botSlug.startsWith('persona-')) return
+        const id = info.botSlug.slice('persona-'.length)
+        const sessionId = String(agent.id)
+        if (!store.persona(id) || (store.personaFor(sessionId)?.id ?? id) !== id) return
+        if (!store.personaFor(sessionId)) store.bind(sessionId, id)
+        attach(agent)
+      })
+      return () => {
+        release()
+        if (botHost === host) botHost = undefined
+      }
+    })
+  })
 
   ctx.on('agent/created', ({ agent }) => { modelForSession(String(agent.id)); attach(agent) })
   ctx.on('agent/disposed', ({ agent }) => {
