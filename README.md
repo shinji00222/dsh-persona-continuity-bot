@@ -4,7 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![DSH](https://img.shields.io/badge/DSH-0.2.x-4B6EF5)
-![version](https://img.shields.io/badge/version-0.2.0--preview.15-orange)
+![version](https://img.shields.io/badge/version-0.2.0--preview.17-orange)
 
 > Cross-session Markdown memory for each DeepSeek Harness persona.
 
@@ -15,7 +15,7 @@
 
 DSH 的会话彼此独立：关掉一个会话，里面聊过的偏好、决定和进度就留在了里面。人格续忆让你在开新会话时选回同一个人格，它带着自己的记忆继续干活，不用每次重新交代背景。
 
-每个人格的记忆存放在独立的本地 Markdown 目录，无需 Git。Tobs Bot 模式的接入还在验证中。
+每个人格的记忆存放在独立的本地 Markdown 目录，无需 Git。安装带人格续忆接入的 Tobs 后，原人格会出现在左侧「Bot 模式」的频道列表。
 
 ## 功能
 
@@ -35,6 +35,8 @@ npm pack
 把生成的 `.tgz` 通过 DSH 插件管理器装进目标 profile，再重启该 profile。首次建议先建两个不同人格和一个普通会话试一遍。
 
 ## 使用
+
+从 DSH 左侧全局面板打开「人格工作台」，可以新建人格、改设定和管理各自的记忆。
 
 1. **选人格**：新会话输入框旁点「普通会话」，在菜单里选人格或「＋ 新建人格」。左键切换，右键人格条目可重命名。开聊后人格固定；普通会话聊过之后可以绑定一次到某个人格，已有对话会自动在后台提炼入库。
 2. **设定人格**：「设置 → 人格续忆」里填写人格设定、管理记忆条目，或单独关闭某个人格的自动记忆。修改设定后，已绑定的会话从下一轮起生效。

@@ -43,6 +43,7 @@ export function apply(ctx) {
   const attached = new Map()
   const turns = new Map()
   const reviews = new Set()
+  const linkedBotSessions = new Set()
   let botHost
   const lifetime = new AbortController()
   let draining = false
@@ -110,7 +111,7 @@ export function apply(ctx) {
       if (!persona) return { found: false, reason: 'not-bound' }
       const workspace = session.header?.cwd ?? ''
       if (typeof args?.memory_id === 'string' && args.memory_id.trim()) {
-        const entry = store.detail(persona.id, args.memory_id.trim(), workspace)
+        const entry = store.detail(persona.id, args.memory_id.trim(), linkedBotSessions.has(id) ? undefined : workspace)
         return entry ? { found: true, memory: entry } : { found: false }
       }
       const timeout = AbortSignal.timeout(6000)
@@ -130,7 +131,7 @@ export function apply(ctx) {
       if (!query) {
         return { memories: store.catalog(persona.id, workspace, 16) }
       }
-      const memories = store.search(persona.id, workspace, query, { scoped: true }).slice(0, 6)
+      const memories = store.search(persona.id, workspace, query, { scoped: !linkedBotSessions.has(id) }).slice(0, 6)
       const history = await retrieveHistory(ctx.sessionQuery, session.header, allowed, { query }, signal)
         .catch(() => ({ status: 'unavailable' }))
       return { memories, history }
@@ -560,10 +561,17 @@ export function apply(ctx) {
         const sessionId = String(agent.id)
         if (!store.persona(id) || (store.personaFor(sessionId)?.id ?? id) !== id) return
         if (!store.personaFor(sessionId)) store.bind(sessionId, id)
+        linkedBotSessions.add(sessionId)
         attach(agent)
+      })
+      const releaseNames = host.onContinuityNameChange?.((id, name) => {
+        const persona = store.persona(id)
+        if (persona && persona.name !== name) store.savePersona(id, name)
       })
       return () => {
         release()
+        releaseNames?.()
+        linkedBotSessions.clear()
         if (botHost === host) botHost = undefined
       }
     })
@@ -572,6 +580,7 @@ export function apply(ctx) {
   ctx.on('agent/created', ({ agent }) => { modelForSession(String(agent.id)); attach(agent) })
   ctx.on('agent/disposed', ({ agent }) => {
     const id = String(agent.id)
+    linkedBotSessions.delete(id)
     detach(id)
     turns.delete(id)
   })
@@ -596,7 +605,9 @@ export function apply(ctx) {
           }
         } else {
           try {
-            turn.recall = store.recall(turn.persona, agent.session.header?.cwd ?? '', query, String(agent.session.id))
+            const id = String(agent.session.id)
+            turn.recall = store.recall(turn.persona, agent.session.header?.cwd ?? '', query, id,
+              { scoped: !linkedBotSessions.has(id) })
           } catch {
             ctx.logger.warn('persona memory recall is temporarily unavailable')
           }

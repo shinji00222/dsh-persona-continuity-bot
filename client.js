@@ -3,13 +3,31 @@ window.__ModuleLoader__.load({
   factory(require) {
     const React = require('react')
     const { createElement: h, useEffect, useId, useState } = React
+    const primitives = require('@deepseek-ai/dsh-client-ui-primitives')
+    const { Button, Menu, Modal, Input } = primitives
+    const Switch = primitives.Switch ?? (({ checked, label, disabled, onChange }) =>
+      h('input', { type: 'checkbox', role: 'switch', checked, disabled, 'aria-label': label,
+        onChange: event => onChange(event.target.checked) }))
+    const Tag = primitives.Tag ?? 'span'
+    const hiddenIcon = () => null
     const {
-      Button, Menu, Modal, Input, Switch, Tag,
       IconChevronDownOutline14, IconChevronLeftOutline14, IconPlusOutline16,
       IconSearchOutline16, IconEditOutline16, IconTrashOutline16,
       IconLinkOutline14, IconRefreshOutline16, IconClockOutline16,
       IconCheckOutline16, IconUserOutline16,
-    } = require('@deepseek-ai/dsh-client-ui-primitives')
+    } = Object.fromEntries(Object.entries({
+      IconChevronDownOutline14: 'IconChevronDownOutlineRegular',
+      IconChevronLeftOutline14: 'IconChevronLeftOutlineRegular',
+      IconPlusOutline16: 'IconPlusOutlineRegular',
+      IconSearchOutline16: 'IconSearchOutlineRegular',
+      IconEditOutline16: 'IconListPenOutlineRegular',
+      IconTrashOutline16: 'IconDeleteOutlineRegular',
+      IconLinkOutline14: 'IconLinkOutlineRegular',
+      IconRefreshOutline16: 'IconRefreshOutlineRegular',
+      IconClockOutline16: 'IconClockOutlineRegular',
+      IconCheckOutline16: 'IconCheckOutlineRegular',
+      IconUserOutline16: 'IconListPenOutlineRegular',
+    }).map(([id, legacy]) => [id, primitives[id] ?? primitives[legacy] ?? hiddenIcon]))
 
     const base = '/api/persona-continuity'
     const changedEvent = 'persona-continuity:changed'
@@ -36,6 +54,14 @@ window.__ModuleLoader__.load({
 
     const css = `
 .dpm_root{display:grid;gap:16px;width:100%;max-width:680px;color:var(--dsw-alias-label-primary);font-size:14px;line-height:22px}
+.dpm_workspace{box-sizing:border-box;height:100%;overflow:auto;padding:clamp(16px,4vw,48px);color:var(--dsw-alias-label-primary)}
+.dpm_workspaceTitle{margin:0 0 24px;font-size:24px;line-height:1.3;font-weight:600}
+.dpm_workspaceGrid{display:grid;grid-template-columns:minmax(150px,220px) minmax(0,680px);gap:clamp(16px,3vw,32px);align-items:start}
+.dpm_roster{display:grid;gap:6px;min-width:0}
+.dpm_rosterButton{display:flex;align-items:center;gap:8px;min-width:0;text-align:left;padding:9px 12px;border:0;border-radius:8px;background:transparent;color:inherit;font:inherit;cursor:pointer}
+.dpm_rosterButton:hover,.dpm_rosterButton[aria-pressed=true]{background:var(--dsw-alias-interactive-bg-hover)}
+.dpm_rosterButton span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:680px){.dpm_workspaceGrid{grid-template-columns:minmax(0,1fr)}.dpm_roster{grid-template-columns:repeat(auto-fit,minmax(145px,1fr))}}
 .dpm_toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding-bottom:14px;border-bottom:0.5px solid var(--dsw-alias-border-l2)}
 .dpm_toolbarLeft{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-width:0;flex:1 1 220px}
 .dpm_toolbarRight{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
@@ -86,6 +112,7 @@ window.__ModuleLoader__.load({
     const dictionaries = {
       zh: {
         title: '人格续忆',
+        workspaceTitle: '人格工作台',
         normal: '普通会话',
         persona: '人格',
         selectPersona: '选择人格',
@@ -161,6 +188,7 @@ window.__ModuleLoader__.load({
       },
       en: {
         title: 'Persona Continuity',
+        workspaceTitle: 'Persona Workspace',
         normal: 'Standard chat',
         persona: 'Persona',
         selectPersona: 'Select persona',
@@ -920,7 +948,7 @@ window.__ModuleLoader__.load({
       )
     }
 
-    function Settings({ t }) {
+    function Settings({ t, workspace = false }) {
       const [personas, setPersonas] = useState([])
       const [id, setId] = useState('')
       const [name, setName] = useState('')
@@ -937,7 +965,6 @@ window.__ModuleLoader__.load({
         setName(persona?.name ?? '')
         setInstructions(persona?.instructions ?? '')
         setAutoMemory(persona?.autoMemory ?? true)
-        setBusy(true)
       }
 
       useEffect(() => {
@@ -982,7 +1009,7 @@ window.__ModuleLoader__.load({
         if (!id || busy) return
         const value = typeof next === 'boolean' ? next : !autoMemory
         setAutoMemory(value)
-        setAutoMemoryNotice('')
+        setBusy(true)
         setError('')
         try {
           await call('/memory/settings', { persona: id, autoMemory: value })
@@ -999,8 +1026,8 @@ window.__ModuleLoader__.load({
       const activePersona = personas.find(item => item.id === id)
       const selectorLabel = activePersona?.name ?? t('new')
 
-      return h('section', { className: 'dpm_root' },
-        h('div', { className: 'dpm_toolbar' },
+      const content = h('section', { className: 'dpm_root' },
+        !workspace && h('div', { className: 'dpm_toolbar' },
           h('div', { className: 'dpm_toolbarLeft' },
             h(Menu, {
               open: menuOpen,
@@ -1082,6 +1109,23 @@ window.__ModuleLoader__.load({
         errorMessage(error, t),
         id && h(MemoryPanel, { key: id, id, t }),
       )
+      if (!workspace) return content
+      const title = t('workspaceTitle')
+      return h('div', { className: 'dpm_workspace' },
+        h('h1', { className: 'dpm_workspaceTitle' }, title),
+        h('div', { className: 'dpm_workspaceGrid' },
+          h('nav', { className: 'dpm_roster', 'aria-label': t('selectPersona') },
+            ...personas.map(item => h('button', {
+              key: item.id, type: 'button', className: 'dpm_rosterButton',
+              disabled: busy, 'aria-pressed': id === item.id, onClick: () => choose(item.id),
+            }, h(IconUserOutline16, { size: 16, 'aria-hidden': true }), h('span', null, item.name))),
+            h('button', { type: 'button', className: 'dpm_rosterButton', disabled: busy,
+              onClick: () => choose(createOption) },
+            h(IconPlusOutline16, { size: 16, 'aria-hidden': true }), h('span', null, t('new'))),
+          ),
+          content,
+        ),
+      )
     }
 
     return {
@@ -1096,6 +1140,13 @@ window.__ModuleLoader__.load({
         ctx.slots.inject('conversation.input.left', () => ctx.slots.register({
           name: 'conversation.input.left', id: ns, order: 32, locale: ns,
         }, props => h(Picker, { key: String(props.sessionId ?? ''), ...props, t })))
+        const workspace = ns + '-workspace'
+        ctx.slots.inject('main', () => ctx.slots.register({
+          name: 'main', key: workspace,
+        }, () => h(Settings, { t, workspace: true })))
+        ctx.slots.inject('sidebar.panellist', () => ctx.slots.register({
+          name: 'sidebar.panellist', id: workspace, order: 21, label: () => t('workspaceTitle'), locale: ns,
+        }, props => h(IconUserOutline16, { ...props, 'aria-hidden': true })))
       },
     }
   },
