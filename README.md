@@ -70,19 +70,20 @@ npm pack
 
 把生成的 `.tgz` 通过 DSH 插件管理器装进目标 profile，重启即可。
 
-### 方式二：合并包（人格续忆 + Tobs Bot 模式）
+### 方式二：合并包（人格续忆 + Tobs Bot 模式，推荐）
 
-装这一个包就够了，不用再单独装 `deepseekbot`。先在 Tobs 仓库构建好产物（默认在 `dist/continuity-desktop/`），再在本仓库打包：
+直接去 [Releases](https://github.com/shinji00222/dsh-persona-continuity-bot/releases) 下载 `dsh-persona-continuity-<版本>-with-tobs.tgz`（单文件自包含，含完整 Bot 模式、微信直觉群聊、本地精选人格模板），通过 DSH 插件管理器装进目标 profile 并重启即可，不用再单独装 `deepseekbot`。
+
+如果需要自己从源码重打合并包（先在 Tobs 仓库构建好产物，默认在 `dist/continuity-desktop/`）：
 
 ```bash
 npm run pack:tobs   # 可用 TOBS_DIST=<目录> 指定 Tobs 产物位置
 ```
 
-会生成 `dist/dsh-persona-continuity-<版本>-with-tobs.tgz`（同目录的 `dist/tobs-<版本>/` 为依赖目录，别删）。
+会生成单文件自包含的 `dist/dsh-persona-continuity-<版本>-with-tobs.tgz`（无本机路径依赖，可直接发给别人安装）。
 
 > [!NOTE]
 > - 装合并包前先从 profile 卸掉单独的 `deepseekbot`，避免重复加载。
-> - 合并包依赖本机同目录的 `dist/tobs-<版本>/`，仅限本机自建自用；跨设备分享请用纯插件包。
 > - 插件 ID 不变，切换方式后已有人格和记忆照常保留。
 
 <a id="usage"></a>

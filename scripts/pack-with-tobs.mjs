@@ -1,11 +1,14 @@
 #!/usr/bin/env node
-// Build one DSH package that ships persona continuity together with the Tobs Bot mode.
+// Build one portable, self-contained DSH package that ships persona continuity
+// together with the Tobs Bot mode (no machine-local file: paths).
 //
 // The Tobs fork is built separately and leaves its packages in
 // tobs-persona-continuity/dist/continuity-desktop. This script picks the newest
-// deepseekbot build there, merges its cordis patch into ours, points the
-// @botharness/* dependencies at copies of the matching tarballs and packs the
-// result as dist/dsh-persona-continuity-<version>-with-tobs.tgz.
+// deepseekbot build there, merges its cordis patch into ours, bundles the four
+// @botharness/* packages inside node_modules/ via bundleDependencies, hoists
+// their public npm dependencies to top-level dependencies so pnpm/npm installs
+// platform-native binaries automatically on any machine, and packs the result
+// as dist/dsh-persona-continuity-<version>-with-tobs.tgz.
 //
 // Override the Tobs build folder with TOBS_DIST=<dir>.
 import { execSync } from 'node:child_process'
@@ -58,14 +61,29 @@ try {
   mkdirSync(join(pkgDir, 'tobs'), { recursive: true })
   copyFileSync(subagentHelper, join(pkgDir, 'tobs', 'subagent-control.mjs'))
 
-  // Keep the Tobs tarballs next to the output so the file: dependencies stay valid.
-  const vendorDir = join(outDir, `tobs-${tobsVersion}`)
-  mkdirSync(vendorDir, { recursive: true })
+  // Unpack the four @botharness/* tarballs into node_modules/@botharness/* so
+  // npm pack bundles them inside the single tarball with zero local file: paths.
+  // Also hoist their public npm dependencies to top-level dependencies so pnpm/npm
+  // resolves and installs platform-specific native binaries (e.g. sharp, resvg)
+  // cleanly on any user's machine.
   const dependencies = { ...pkg.dependencies }
+  const bundleDependencies = []
+  const bundledScopeDir = join(pkgDir, 'node_modules', '@botharness')
+  mkdirSync(bundledScopeDir, { recursive: true })
+
   for (const [name, file] of Object.entries(tarballs)) {
-    const target = join(vendorDir, `botharness-${name}-${tobsVersion}.tgz`)
-    copyFileSync(file, target)
-    dependencies[`@botharness/${name}`] = `file:${target.replaceAll('\\', '/')}`
+    const pkgName = `@botharness/${name}`
+    const targetDir = join(bundledScopeDir, name)
+    mkdirSync(targetDir, { recursive: true })
+    execSync(`tar -xzf "${file}" --strip-components=1 -C "${targetDir}"`)
+
+    const subPkg = JSON.parse(readFileSync(join(targetDir, 'package.json'), 'utf8'))
+    for (const [dep, range] of Object.entries(subPkg.dependencies ?? {})) {
+      if (dep.startsWith('@botharness/') && tobsPackages.includes(dep.slice('@botharness/'.length))) continue
+      if (dependencies[dep] === undefined) dependencies[dep] = range
+    }
+    dependencies[pkgName] = tobsVersion
+    bundleDependencies.push(pkgName)
   }
 
   const ownPatch = readFileSync(join(root, 'cordis.patch.yml'), 'utf8').trimEnd()
@@ -79,10 +97,12 @@ try {
     exports: { ...pkg.exports, './tobs/subagent-control.mjs': './tobs/subagent-control.mjs' },
     files: [...pkg.files, 'LICENSE-tobs', 'tobs/subagent-control.mjs'],
     dependencies,
+    bundleDependencies,
     scripts: undefined,
     dsh: { ...pkg.dsh, tobs: tobsVersion },
   }, null, 2)}\n`)
 
+  mkdirSync(outDir, { recursive: true })
   // Pack inside staging so the standalone tarball of the same version is left alone.
   const packed = execSync(`npm pack --silent --pack-destination "${staging}"`, { cwd: pkgDir, encoding: 'utf8' })
     .trim().split(/\r?\n/).at(-1)
