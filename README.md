@@ -25,7 +25,7 @@
 
 支持两种用法：
 - **纯插件模式**：直接装进 DSH，在普通会话里用多人格跨会话记忆。
-- **合并包模式（含 Tobs Bot）**：基于开源项目 [DeepSeekBot（Tobs）](https://github.com/BotHarness/DeepSeekBot) 做了日常高频增强，一步装齐私聊、多人格群聊、工作过程时间轴与工作区管理。
+- **合并包模式（含完整 Bot 模式）**：一步装齐侧栏频道、私聊工作过程时间轴、微信直觉多人格群聊与工作区管理。
 
 <a id="features"></a>
 
@@ -40,14 +40,14 @@
 | **不用反复交代背景** | 人格自主决定记什么、更新什么，空闲时自动回顾新对话并合并重复笔记；新会话说一句「继续上次」，即可按句召回记忆并翻查同工作区旧对话。 |
 | **把旧对话变成长期记忆** | 在「人格工作台」选中未绑定或当前人格的历史会话一键导入，后台排队提炼并自动去重；可按人格单独开关自动记忆。 |
 
-### 合并包增强：相比原版 DeepSeekBot（Tobs）新增
+### Bot 模式能力（合并包自带）
 
 | 能力 | 做了什么增强 |
 | --- | --- |
 | **微信直觉群聊** | 默认立即响应（不用等攒条数或 30 秒），气泡显示已收到人数（`✓2`）；右上角 `···` 展开群聊信息抽屉，成员头像宫格、`+` 一键拉人、解散群聊一目了然。 |
 | **群聊「全体」工作区授权** | 私聊与群聊右侧边栏直达 **工作区** 面板；群聊点 **「全体」** 选一次本地目录，即可一次性授权给全群人格（可选允许写入）。 |
-| **私聊工作过程时间轴** | 托布与其他人格私聊共用极简无框折叠时间轴，实时展示工具步骤、耗时与显式摘要，纯文本直回自动省略；额度不足（`ACCOUNT_QUOTA`）直接给中文提示。 |
-| **主人格查普通 DSH 历史** | 唯一主人格（托布）在本地私聊里可只读搜索、翻看普通 DSH 对话记录，其他人格与群聊默认隔离。 |
+| **私聊工作过程时间轴** | dot 与其他人格私聊共用极简无框折叠时间轴，实时展示工具步骤、耗时与显式摘要，纯文本直回自动省略；额度不足（`ACCOUNT_QUOTA`）直接给中文提示。 |
+| **主人格查普通 DSH 历史** | 唯一主人格（dot）在本地私聊里可只读搜索、翻看普通 DSH 对话记录，其他人格与群聊默认隔离。 |
 | **按人格控制内置权限** | 右键人格可单独开关浏览器控制与电脑控制（Computer Use），避免一刀切授权。 |
 | **本地精选人格模板** | 移除上游外部人格市场请求与发布入口，改为纯本地内置 6 个原创实用人格模板（支持搜索、分类筛选、预览设定与一键导入）。 |
 
@@ -59,7 +59,7 @@
 | | |
 | --- | --- |
 | <img src="docs/screenshots/standard-persona-picker.png" alt="普通 DSH 会话可选人格" /><br />**普通模式选人格**：不切 Bot 模式也能在输入框旁切换「普通会话」或已有人格，支持 `+ 新建人格` 与右键重命名。 | <img src="docs/screenshots/memory-workbench.png" alt="人格工作台与本地 Markdown 记忆" /><br />**人格工作台与本地记忆**：左侧切人格、右侧管设定与「自动记忆」开关，每条长期记忆落盘为本地 Markdown，支持搜索、编辑和从旧对话导入。 |
-| <img src="docs/screenshots/dm-timeline.png" alt="托布私聊与工作过程时间轴" /><br />**私聊工作过程时间轴**：托布私聊只读检索普通 DSH 历史，折叠时间轴实时展示工具步骤、耗时与思考摘要。 | <img src="docs/screenshots/group-chat.png" alt="微信直觉多人格群聊" /><br />**微信直觉多人格群聊**：默认立即响应，多个 Bot 按各自设定分工接话，消息气泡显示已收到人数。 |
+| <img src="docs/screenshots/dm-timeline.png" alt="主人格私聊与工作过程时间轴" /><br />**私聊工作过程时间轴**：主人格（dot）私聊只读检索普通 DSH 历史，折叠时间轴实时展示工具步骤、耗时与思考摘要。 | <img src="docs/screenshots/group-chat.png" alt="微信直觉多人格群聊" /><br />**微信直觉多人格群聊**：默认立即响应，多个 Bot 按各自设定分工接话，消息气泡显示已收到人数。 |
 
 <p align="center">
   <img src="docs/screenshots/group-drawer.png" width="760" alt="群聊信息抽屉与成员管理" /><br />
@@ -85,19 +85,19 @@ npm pack
 
 把生成的 `.tgz` 通过 DSH 插件管理器装进目标 profile，重启即可。
 
-### 方式二：合并包（人格续忆 + Tobs Bot 模式）
+### 方式二：合并包（人格续忆 + 完整 Bot 模式）
 
-装这一个包就够了，不用再单独装 `deepseekbot`。先在 Tobs 仓库构建好产物（默认在 `dist/continuity-desktop/`），再在本仓库打包：
+装这一个包就够了。先构建好 Bot 层桌面产物（默认在 `dist/continuity-desktop/`），再在本仓库打包：
 
 ```bash
-npm run pack:tobs   # 可用 TOBS_DIST=<目录> 指定 Tobs 产物位置
+npm run pack:tobs   # 可用 TOBS_DIST=<目录> 指定桌面产物位置
 ```
 
 会生成 `dist/dsh-persona-continuity-<版本>-with-tobs.tgz`（同目录的 `dist/tobs-<版本>/` 为依赖目录，请保留）。
 
 > [!NOTE]
-> - 装合并包前先从 profile 卸掉单独的 `deepseekbot`，避免重复加载。
-> - 合并包依赖本机同目录的 `dist/tobs-<版本>/`，仅限本机自建自用；跨设备分享请用纯插件包。
+> - 装合并包前请先从 profile 卸掉旧的同类 Bot 插件，避免重复加载。
+> - 合并包依赖本机同目录的 `dist/tobs-<版本>/`，仅限本机自建自用；跨设备分享请使用纯插件包。
 > - 插件 ID 不变，切换方式后已有人格和记忆照常保留。
 
 ### 装好后怎么用
@@ -115,14 +115,14 @@ npm run pack:tobs   # 可用 TOBS_DIST=<目录> 指定 Tobs 产物位置
 
 ### 常见问题
 
-**和原版 DeepSeekBot（Tobs）是什么关系？**  
-本项目既可作为独立插件运行在普通 DSH 会话里，也基于 MIT 开源的 [DeepSeekBot（Tobs）](https://github.com/BotHarness/DeepSeekBot) 做了日常高频体验增强（普通会话续忆、主人格查普通历史、私聊折叠时间轴、微信直觉群聊、全体工作区授权、本地精选模板等）。
-
 **纯插件和合并包怎么选？**  
-如果你平时只用 DSH 原生对话界面、只需要给不同角色配上独立跨会话记忆，装**纯插件包**最轻巧；如果你想要完整的侧栏频道、多人格群聊和工作区协同，直接打**合并包**即可。
+如果你平时只用 DSH 原生对话界面、只需要给不同角色配上独立跨会话记忆，装**纯插件包**最轻巧；如果你想要完整的侧栏频道、私聊时间轴、多人格群聊和工作区协同，直接打**合并包**即可。
 
 **记忆存在哪？会上传到外部服务器吗？**  
 不会。所有记忆都以纯 Markdown 存放在本地 `$DSH_HOME/persona-continuity/memories/<personaId>/`（无需 Git），插件本身不额外联网。
+
+**普通会话、子会话和无痕会话会被记住吗？**  
+不会。只有主动绑定了人格的会话才会提炼和召回记忆，未绑定的普通会话、子会话和无痕会话默认完全隔离。
 
 <a id="privacy"></a>
 
@@ -157,9 +157,9 @@ npm test        # 单元测试
 | `lib/history.js` | 旧对话检索与范围隔离 |
 | `lib/web.js` | 复用 DSH 鉴权的管理路由 |
 | `test/` | `node:test` 单元测试 |
-| `scripts/pack-with-tobs.mjs` | 打包人格续忆 + Tobs Bot 模式合并包 |
+| `scripts/pack-with-tobs.mjs` | 打包人格续忆 + 完整 Bot 模式合并包 |
 
-相关文档：[技术调研](docs/research.md) · [项目规划](docs/project-plan.md) · [Tobs 接入调研](docs/tobs-integration-research.md) · [Tobs 接入规划](docs/tobs-integration-plan.md) · [开发记录](docs/development-log.md)
+相关文档：[技术调研](docs/research.md) · [项目规划](docs/project-plan.md) · [开发记录](docs/development-log.md)
 
 </details>
 
