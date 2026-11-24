@@ -145,7 +145,7 @@ window.__ModuleLoader__.load({
         turnNumber: '第 {n} 轮',
         openSource: '查看来源',
         sourceModalTitle: '记忆来源',
-        sourceNotConnected: '来源原文跳转与读取接口尚未接入宿主，以下为记录的来源元信息：',
+        sourceNotConnected: '无法读取该来源会话（可能已被删除或暂不可访问），以下为记录的来源元信息：',
         sourceTurnFallback: '暂未获取到该轮次原文内容。',
         backToList: '返回列表',
         scopeLabel: '项目范围',
@@ -221,7 +221,7 @@ window.__ModuleLoader__.load({
         turnNumber: 'Turn {n}',
         openSource: 'View source',
         sourceModalTitle: 'Memory source',
-        sourceNotConnected: 'Source transcript navigation is not yet connected to the host. Recorded metadata:',
+        sourceNotConnected: 'Unable to load the source chat (it may have been deleted or is unavailable). Recorded metadata:',
         sourceTurnFallback: 'Source turn content is not available yet.',
         backToList: 'Back to list',
         scopeLabel: 'Scope',
@@ -284,6 +284,11 @@ window.__ModuleLoader__.load({
     function formatTurn(row, t) {
       if (row.turn === undefined || row.turn === null) return ''
       return Number(row.turn) < 0 ? t('importedTurn') : formatText(t('turnNumber'), { n: row.turn })
+    }
+
+    function shortRevision(revision) {
+      const text = String(revision ?? '')
+      return text.length > 8 ? text.slice(0, 7) : text
     }
 
     function useImportPoll(personaId, active, onDone) {
@@ -599,7 +604,7 @@ window.__ModuleLoader__.load({
         stubNote && h('p', { className: 'dpm_notice' }, t('sourceNotConnected')),
         h('div', { className: 'dpm_sourceRow' },
           h('div', { style: { display: 'grid', gap: 2, minWidth: 0 } },
-            h('span', { className: 'dpm_label' }, row.sessionTitle || t('source')),
+            h('span', { className: 'dpm_label' }, sourceData?.title || row.sessionTitle || t('source')),
             h('span', { className: 'dpm_mono' }, row.session)),
           row.turn !== undefined && row.turn !== null && h(Tag, null, formatTurn(row, t))),
         loading && h('p', { className: 'dpm_hint' }, t('loading')),
@@ -645,7 +650,8 @@ window.__ModuleLoader__.load({
       }
 
       const turnLabel = formatTurn(row, t)
-      const updatedLabel = formatTime(row.updatedAt)
+      const updatedLabel = formatTime(row.updated ?? row.updatedAt)
+      const workspaceLabel = row.workspace || row.workspaceKey
 
       return h('div', { className: 'dpm_detailBox' },
         h('div', { className: 'dpm_cardHeader' },
@@ -653,7 +659,7 @@ window.__ModuleLoader__.load({
             h(IconChevronLeftOutline14, { size: 14, 'aria-hidden': true }),
             t('backToList')),
           h('div', { className: 'dpm_meta' },
-            row.workspaceKey && h(Tag, null, row.workspaceKey),
+            workspaceLabel && h(Tag, null, workspaceLabel),
           ),
         ),
         editing ? h('form', {
@@ -920,14 +926,14 @@ window.__ModuleLoader__.load({
             },
             h('div', { className: 'dpm_itemTop' },
               h('span', { className: 'dpm_itemTitle' }, row.title),
-              row.revision !== undefined && h(Tag, null, t('revisionPrefix') + row.revision),
+              row.revision !== undefined && h(Tag, null, t('revisionPrefix') + shortRevision(row.revision)),
             ),
             row.summary && h('p', { className: 'dpm_itemSummary' }, row.summary),
             h('div', { className: 'dpm_meta' },
-              row.workspaceKey && h(Tag, null, row.workspaceKey),
+              (row.workspace || row.workspaceKey) && h(Tag, null, row.workspace || row.workspaceKey),
               row.session && h('span', null, (row.sessionTitle || row.session) +
                 (formatTurn(row, t) ? ' · ' + formatTurn(row, t) : '')),
-              row.updatedAt && h('span', null, formatTime(row.updatedAt)),
+              (row.updated ?? row.updatedAt) && h('span', null, formatTime(row.updated ?? row.updatedAt)),
             ))))
           : h('div', { className: 'dpm_empty' },
             h('p', { style: { margin: '0 0 4px' } }, t('empty')),
@@ -969,13 +975,19 @@ window.__ModuleLoader__.load({
 
       useEffect(() => {
         let live = true
-        call('/state').then(value => {
+        const load = (initial = false) => call('/state').then(value => {
           if (!live) return
           const list = value.personas ?? []
           setPersonas(list)
-          if (list.length) syncSelection(list, list[0].id)
-        }, failure => { if (live) setError(failure.message) })
-        return () => { live = false }
+          if (initial && list.length) syncSelection(list, list[0].id)
+        }, failure => { if (live && initial) setError(failure.message) })
+        void load(true)
+        const onChanged = () => { void load(false) }
+        window.addEventListener(changedEvent, onChanged)
+        return () => {
+          live = false
+          window.removeEventListener(changedEvent, onChanged)
+        }
       }, [])
 
       function choose(nextId) {

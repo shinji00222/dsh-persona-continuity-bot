@@ -47,12 +47,16 @@ try {
   execSync(`tar -xzf "${join(tobsDist, `deepseekbot-${tobsVersion}.tgz`)}" -C "${botDir}"`)
   const botPatch = readFileSync(join(botDir, 'package', 'cordis.patch.yml'), 'utf8')
 
-  // Stage our own published files.
+  // Stage our own published files plus the subagent control helper referenced by the Tobs preset.
   const pkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'))
   const pkgDir = join(staging, 'pkg')
   mkdirSync(pkgDir)
   for (const entry of pkg.files) cpSync(join(root, entry), join(pkgDir, entry), { recursive: true })
   copyFileSync(join(botDir, 'package', 'LICENSE'), join(pkgDir, 'LICENSE-tobs'))
+  const subagentHelper = join(botDir, 'package', 'dist', 'subagent-control.mjs')
+  if (!existsSync(subagentHelper)) fail(`missing dist/subagent-control.mjs in deepseekbot ${tobsVersion}`)
+  mkdirSync(join(pkgDir, 'tobs'), { recursive: true })
+  copyFileSync(subagentHelper, join(pkgDir, 'tobs', 'subagent-control.mjs'))
 
   // Keep the Tobs tarballs next to the output so the file: dependencies stay valid.
   const vendorDir = join(outDir, `tobs-${tobsVersion}`)
@@ -65,13 +69,15 @@ try {
   }
 
   const ownPatch = readFileSync(join(root, 'cordis.patch.yml'), 'utf8').trimEnd()
+  const rewrittenBotPatch = botPatch.replaceAll('deepseekbot/dist/subagent-control.mjs', `${pkg.name}/tobs/subagent-control.mjs`)
   writeFileSync(join(pkgDir, 'cordis.patch.yml'),
-    `${ownPatch}\n\n# Tobs Bot mode, copied from deepseekbot ${tobsVersion}.\n${botPatch}`)
+    `${ownPatch}\n\n# Tobs Bot mode, copied from deepseekbot ${tobsVersion}.\n${rewrittenBotPatch}`)
 
   writeFileSync(join(pkgDir, 'package.json'), `${JSON.stringify({
     ...pkg,
     description: `${pkg.description} Includes the Tobs Bot mode (deepseekbot ${tobsVersion}).`,
-    files: [...pkg.files, 'LICENSE-tobs'],
+    exports: { ...pkg.exports, './tobs/subagent-control.mjs': './tobs/subagent-control.mjs' },
+    files: [...pkg.files, 'LICENSE-tobs', 'tobs/subagent-control.mjs'],
     dependencies,
     scripts: undefined,
     dsh: { ...pkg.dsh, tobs: tobsVersion },

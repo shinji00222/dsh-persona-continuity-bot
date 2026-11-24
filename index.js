@@ -7,7 +7,7 @@ import { extract, rememberableInput, reviewMemories, textBlocks } from './lib/ex
 import { registerWeb } from './lib/web.js'
 import {
   chunksFromEvents, historyRequest, listSessionsForImport, modelFromEvents, readConversationChunks,
-  recentMemorySources, retrieveHistory,
+  readTurnSource, recentMemorySources, retrieveHistory,
 } from './lib/history.js'
 
 export const name = 'persona-continuity'
@@ -213,8 +213,11 @@ export function apply(ctx) {
             ctx.llm, { ...job, memoryPersona }, known, signal,
           )
           if (!lifetime.signal.aborted) store.finish(job, items)
-        } catch {
-          if (!lifetime.signal.aborted) store.fail(job)
+        } catch (error) {
+          if (!lifetime.signal.aborted) {
+            ctx.logger.warn(`persona-continuity: memory extraction failed (${error?.message || 'unknown error'})`)
+            store.fail(job)
+          }
         }
       }
     })().catch(() => {
@@ -295,8 +298,8 @@ export function apply(ctx) {
     if (String(id).startsWith('session-incognito-')) {
       return { supported: false, hasHistory: false, hasActiveTurn: false, workspace: '', model: null, chunks: () => [] }
     }
+    const signal = AbortSignal.any([lifetime.signal, AbortSignal.timeout(4000)])
     try {
-      const signal = AbortSignal.any([lifetime.signal, AbortSignal.timeout(4000)])
       const obs = await ctx.sessionQuery.observeSession(id, { signal, projectionMode: 'none' })
       try {
         const events = obs.events ?? []
@@ -314,6 +317,9 @@ export function apply(ctx) {
         obs[Symbol.dispose]()
       }
     } catch {
+      if (signal.aborted) {
+        return { supported: false, hasHistory: false, hasActiveTurn: false, workspace: '', model: null, chunks: () => [] }
+      }
       return { supported: true, hasHistory: false, hasActiveTurn: false, workspace: '', model: null, chunks: () => [] }
     }
   }
@@ -425,7 +431,7 @@ export function apply(ctx) {
       return saved
     },
     autoMemory: (id, enabled) => store.setAutoMemory(id, enabled),
-    list: (persona, query) => store.search(persona, '', query),
+    list: (persona, query) => store.search(persona, '', query, { limit: 100 }),
     edit: (persona, id, value) => store.edit(persona, id, value),
     forget: (persona, id, revision) => store.forget(persona, id, revision),
     async review(personaId, sessionId) {
@@ -459,6 +465,19 @@ export function apply(ctx) {
     async historySessions() {
       const signal = AbortSignal.any([lifetime.signal, AbortSignal.timeout(8000)])
       return listSessionsForImport(ctx.sessionQuery, store.bindingsMap(), signal)
+    },
+    async historySource(persona, sessionId, turnRaw) {
+      if (!persona || !sessionId || !store.boundSessions(persona).has(sessionId)) {
+        throw new Error('无权查看该会话来源')
+      }
+      const parsedTurn = turnRaw !== null && turnRaw !== undefined && String(turnRaw).trim() !== ''
+        ? Number(turnRaw)
+        : null
+      const turn = Number.isInteger(parsedTurn) ? parsedTurn : null
+      const signal = AbortSignal.any([lifetime.signal, AbortSignal.timeout(4000)])
+      const result = await readTurnSource(ctx.sessionQuery, sessionId, turn, signal)
+      if (!result) throw new Error('无法读取该来源会话')
+      return result
     },
     async importHistory({ persona, sessions, activeSession } = {}) {
       if (typeof persona !== 'string' || !store.personas().some(item => item.id === persona)) {
@@ -530,8 +549,10 @@ export function apply(ctx) {
   ctx.effect(() => {
     const poll = () => {
       // Regular turn jobs take priority over consolidation.
-      void drainReview().catch(() => {
-        if (!lifetime.signal.aborted) ctx.logger.warn('persona-continuity: memory review deferred after failure')
+      void drainReview().catch(error => {
+        if (!lifetime.signal.aborted) {
+          ctx.logger.warn(`persona-continuity: memory review deferred (${error?.message || 'unknown error'})`)
+        }
       })
       drain()
     }

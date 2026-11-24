@@ -752,3 +752,71 @@ test('persona_recall tool and memory catalog enforce strict bound-session isolat
   assert.equal(searched.history.status, 'found')
   assert.equal(searched.history.source.id, 'boundOld')
 })
+
+test('history/source returns exact bound turn excerpt and blocks unbound or foreign sessions', async t => {
+  const sessions = new Map()
+  const agents = new Map()
+  const observations = {
+    sA: {
+      header: { id: 'sA', cwd: 'ws', createdAt: 10 },
+      events: [
+        { type: 'session/title', data: { title: '数据库选型讨论' } },
+        { type: 'turn/start', data: { turn: 1 } },
+        { type: 'user/message', data: { source: { kind: 'user' }, content: '第一轮：先用 SQLite。' } },
+        { type: 'assistant/message', data: { message: { content: '明白，第一轮记录 SQLite。' } } },
+        { type: 'turn/end', data: { turn: 1, reason: { kind: 'completed' } } },
+        { type: 'turn/start', data: { turn: 2 } },
+        { type: 'user/message', data: { source: { kind: 'user' }, content: '第二轮：改成 PostgreSQL。' } },
+        { type: 'assistant/message', data: { message: { content: '好的，已更新为 PostgreSQL。' } } },
+        { type: 'turn/end', data: { turn: 2, reason: { kind: 'completed' } } },
+      ],
+    },
+    sB: {
+      header: { id: 'sB', cwd: 'ws', createdAt: 20 },
+      events: [
+        { type: 'user/message', data: { source: { kind: 'user' }, content: 'B 的私有讨论' } },
+        { type: 'assistant/message', data: { message: { content: '收到' } } },
+      ],
+    },
+  }
+  const { callRoute } = createHarness(t, { sessions, agents, observations })
+  const pA = (await callRoute('POST', '/persona', { id: '', name: 'A', instructions: '' })).json.id
+  const pB = (await callRoute('POST', '/persona', { id: '', name: 'B', instructions: '' })).json.id
+
+  const dbPath = join(process.env.DSH_HOME, 'persona-continuity', 'memory.sqlite')
+  const store = new Store(dbPath)
+  store.bind('sA', pA)
+  store.bind('sB', pB)
+  store.close()
+
+  const hit = await callRoute('GET', `/history/source?persona=${pA}&session=sA&turn=2`)
+  assert.equal(hit.status, 200)
+  assert.equal(hit.json.title, '数据库选型讨论')
+  assert.match(hit.json.excerpt, /第二轮：改成 PostgreSQL/)
+  assert.doesNotMatch(hit.json.excerpt, /第一轮：先用 SQLite/)
+
+  const foreign = await callRoute('GET', `/history/source?persona=${pA}&session=sB&turn=1`)
+  assert.equal(foreign.status, 400)
+})
+
+test('management index lists more than 8 memories without silently truncating', async t => {
+  const { callRoute } = createHarness(t, { sessions: new Map(), agents: new Map() })
+  const pA = (await callRoute('POST', '/persona', { id: '', name: 'A', instructions: '' })).json.id
+  const dbPath = join(process.env.DSH_HOME, 'persona-continuity', 'memory.sqlite')
+  const store = new Store(dbPath)
+  const now = Date.now()
+  for (let i = 1; i <= 10; i++) {
+    store.saveExtractedMemories({
+      persona: pA, session: `s-${i}`, turn: 1, workspace: 'ws', created: now + i,
+      items: [{
+        kind: 'fact', topic: `topic-${i}`, title: `记忆标题 ${i}`,
+        summary: `摘要 ${i}`, detail: `详情内容 ${i}`,
+      }],
+    })
+  }
+  store.close()
+
+  const list = await callRoute('GET', `/index?persona=${pA}&q=`)
+  assert.equal(list.status, 200)
+  assert.equal(list.json.length, 10)
+})
