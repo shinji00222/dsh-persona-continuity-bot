@@ -10,7 +10,7 @@
 
 **给 DeepSeek Harness 的每个人格一份独立的跨会话记忆，像和熟悉的同事一样私聊、拉群、一起干活。**
 
-[演示](#demo) · [能用它做什么](#features) · [截图](#screenshots) · [安装](#install) · [使用](#usage) · [数据与隐私](#privacy) · [开发](#dev)
+[演示](#demo) · [能用它做什么](#features) · [安装](#install) · [使用](#usage) · [数据与隐私](#privacy) · [开发](#dev)
 
 </div>
 
@@ -37,19 +37,6 @@
 | **看清 Bot 正在干什么** | 私聊共用极简无框折叠时间轴，实时展示工具步骤、耗时、显式摘要与可读报错（如余额/额度不足直接提示），纯文本直回自动省略。 |
 | **主人格查普通 DSH 历史** | 唯一主人格（托布）在本地私聊中可只读搜索和读取普通 DSH 对话记录，其他人格与群聊默认隔离。 |
 | **按人格控制内置权限** | 右键人格可单独开关浏览器控制与电脑控制（Computer Use）能力，按需授权。 |
-
-<a id="screenshots"></a>
-
-## 截图
-
-<table>
-  <tr>
-    <td width="50%"><a href="docs/screenshots/group-chat.png"><img src="docs/screenshots/group-chat.png" alt="多人格群聊主界面：极简输入框、已收到人数标记与右上角群聊信息入口" /></a><br /><b>多人格群聊</b>：发送消息后默认立即唤醒并显示已收到人数，右侧直达工作区管理（支持按人格或「全体」一键授权文件夹）。</td>
-    <td width="50%"><a href="docs/screenshots/group-drawer.png"><img src="docs/screenshots/group-drawer.png" alt="微信直觉群聊信息抽屉：成员头像宫格、加号拉人与底部解散群聊" /></a><br /><b>群聊信息抽屉</b>：点击右上角 <code>···</code> 展开，头像宫格展示群成员、虚线 <code>+</code> 一键拉人、底部扁平设置与解散群聊。</td>
-  </tr>
-</table>
-
-_截图来自隔离的本地预览环境，不含真实隐私数据。_
 
 <a id="install"></a>
 
