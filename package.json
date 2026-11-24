@@ -40,7 +40,8 @@
   ],
   "scripts": {
     "check": "node --check index.js && node --check client.js && node --check lib/store.js && node --check lib/local-memory.js && node --check lib/extract.js && node --check lib/web.js && node --check lib/history.js",
-    "test": "node --test"
+    "test": "node --test",
+    "pack:tobs": "node scripts/pack-with-tobs.mjs"
   },
   "dsh": {
     "bundle": {

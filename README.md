@@ -15,7 +15,7 @@
 
 DSH 的会话彼此独立：关掉一个会话，里面聊过的偏好、决定和进度就留在了里面。人格续忆让你在开新会话时选回同一个人格，它带着自己的记忆继续干活，不用每次重新交代背景。
 
-每个人格的记忆存放在独立的本地 Markdown 目录，无需 Git。安装带人格续忆接入的 Tobs 后，原人格会出现在左侧「Bot 模式」的频道列表。
+每个人格的记忆存放在独立的本地 Markdown 目录，无需 Git。单独装就能用；用合并包的话，人格还会出现在左侧「Bot 模式」的频道列表。
 
 ## 功能
 
@@ -33,6 +33,20 @@ npm pack
 ```
 
 把生成的 `.tgz` 通过 DSH 插件管理器装进目标 profile，再重启该 profile。首次建议先建两个不同人格和一个普通会话试一遍。
+
+### 带 Tobs Bot 模式的合并包
+
+想要 Bot 模式的话，装一个合并包就够了，不用再单独装 deepseekbot。先在旁边的 Tobs 分支仓库里构建好（产物在 `dist/continuity-desktop/`），再在本仓库运行：
+
+```bash
+npm run pack:tobs   # 也可以用 TOBS_DIST=<目录> 指定 Tobs 产物位置
+```
+
+生成 `dist/dsh-persona-continuity-<版本>-with-tobs.tgz`，同一目录下的 `dist/tobs-<版本>/` 是它依赖的 Tobs 包，不要删。
+
+- 装合并包前，先从 profile 里卸掉单独的 `deepseekbot`，否则 Bot 插件会被加载两次。
+- 插件 ID 不变，已有人格和记忆照常可用。
+- 只用合并包里人格续忆的部分，跟单独装没有区别；Tobs 自建的 Bot 仍用 Tobs 原来的记忆。
 
 ## 使用
 
@@ -62,6 +76,7 @@ npm pack
 | `lib/history.js` | 旧对话检索与范围隔离 |
 | `lib/web.js` | 复用 DSH 鉴权的管理路由 |
 | `test/` | `node:test` 单元测试 |
+| `scripts/pack-with-tobs.mjs` | 打包人格续忆 + Tobs Bot 模式合并包 |
 
 ## 开发
 
