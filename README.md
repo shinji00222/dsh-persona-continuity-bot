@@ -1,12 +1,12 @@
 # 人格续忆 · DSH Persona Continuity
 
-给 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 的每个「人格」一份独立的跨会话长期记忆。
+给 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 的每个「人格」一份独立的跨会话长期记忆，并支持集成 Tobs 人格模式（私聊、多人格群聊、工作过程时间轴与主人格历史检索）。
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![DSH](https://img.shields.io/badge/DSH-0.2.x-4B6EF5)
 ![version](https://img.shields.io/badge/version-0.2.0--preview.17-orange)
 
-> Cross-session Markdown memory for each DeepSeek Harness persona.
+> Cross-session Markdown memory and Tobs persona mode for DeepSeek Harness.
 
 <!-- 录好 demo 后：把 gif 放到 docs/demo.gif，再去掉下一行注释 -->
 <!-- ![演示](docs/demo.gif) -->
@@ -23,6 +23,11 @@ DSH 的会话彼此独立：关掉一个会话，里面聊过的偏好、决定�
 - **独立本地 Markdown 记忆目录**：每个人格拥有独立的本地 Markdown 目录（无需 Git），支持查看来源、编辑和删除记忆。
 - **人格自主记忆与回顾**：每个人格自己决定记什么、更新什么或跳过什么。空闲时回顾新对话，挑出少量常驻记忆、核对旧决定并合并内容完全重复的笔记。可按人格单独关闭自动记忆。
 - **按句召回与查旧对话**：每轮按对话内容召回相关记忆；支持「继续上次」以及受控检索同工作区同人格的历史原文。
+- **Tobs 人格模式（合并包）**：
+  - **主人格私聊查普通 DSH 对话**：唯一主人格（托布）在本地私聊中可只读搜索与读取普通 DSH 对话历史，其他人格与群聊默认隔离。
+  - **私聊工作过程时间轴**：托布与其他人格私聊共用极简无框折叠时间轴，实时展示工具步骤、耗时、可读错误与模型显式摘要，纯文本直回自动省略。
+  - **微信直觉群聊与工作区管理**：群聊支持秒投递与已收到人数计数（`✓2`）、右上角 `···` 群聊信息抽屉（成员头像宫格、一键拉人、底部解散群聊）、以及私聊/群聊右侧边栏直达工作区文件夹授权。
+  - **按人格控制内置能力**：右键人格可单独开关内置的浏览器控制与电脑控制（Computer Use）权限。
 
 ## 安装
 

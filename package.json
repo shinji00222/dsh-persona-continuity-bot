@@ -6,7 +6,7 @@
   "engines": {
     "node": ">=22.13"
   },
-  "description": "Per-persona cross-session memory for DeepSeek Harness.",
+  "description": "Per-persona cross-session Markdown memory and Tobs persona mode (DM, group chat, work-process timeline, primary persona history recall) for DeepSeek Harness.",
   "keywords": [
     "deepseek-harness",
     "dsh-plugin",
