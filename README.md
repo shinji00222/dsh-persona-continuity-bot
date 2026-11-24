@@ -1,4 +1,4 @@
-# 人格续忆 · DSH Persona Continuity
+# 人格续忆 Bot · DSH Persona Continuity Bot
 
 给 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 的每个「人格」一份独立的跨会话长期记忆，并支持集成 Tobs 人格模式（私聊、多人格群聊、工作过程时间轴与主人格历史检索）。
 
