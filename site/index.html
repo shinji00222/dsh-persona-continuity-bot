@@ -12,18 +12,22 @@
     <div class="container header-inner">
       <a class="brand" href="#top">
         <span class="brand-mark" aria-hidden="true">dot</span>
-        <span class="brand-name">人格续忆 Bot</span>
+        <span class="brand-name" data-i18n="brand">人格续忆 Bot</span>
       </a>
       <nav class="site-nav" aria-label="主导航">
-        <a href="#showcase">实机界面</a>
-        <a href="#memory">本地记忆</a>
-        <a href="#capabilities">核心能力</a>
-        <a href="#install">快速上手</a>
-        <a href="#faq">常见问题</a>
+        <a href="#showcase" data-i18n="nav.showcase">实机界面</a>
+        <a href="#memory" data-i18n="nav.memory">本地记忆</a>
+        <a href="#capabilities" data-i18n="nav.capabilities">核心能力</a>
+        <a href="#install" data-i18n="nav.install">快速上手</a>
+        <a href="#faq" data-i18n="nav.faq">常见问题</a>
       </nav>
       <div class="header-actions">
+        <div class="lang-switch" role="group" aria-label="语言切换 / Language">
+          <button class="lang-btn is-active" type="button" data-lang="zh" aria-pressed="true">中</button>
+          <button class="lang-btn" type="button" data-lang="en" aria-pressed="false">EN</button>
+        </div>
         <a class="btn btn-ghost" href="https://github.com/shinji00222/dsh-persona-continuity-bot" target="_blank" rel="noopener">GitHub</a>
-        <a class="btn btn-primary" href="#install">立即安装</a>
+        <a class="btn btn-primary" href="#install" data-i18n="cta.installNow">立即安装</a>
       </div>
     </div>
   </header>
@@ -33,15 +37,15 @@
     <section class="hero">
       <div class="container hero-grid">
         <div class="hero-copy">
-          <h1>给每个人格一份独立的本地 Markdown 记忆</h1>
-          <p class="hero-lead">
+          <h1 data-i18n="hero.title">给每个人格一份独立的本地 Markdown 记忆</h1>
+          <p class="hero-lead" data-i18n="hero.lead">
             运行在 DeepSeek Harness 里的开源插件。原生会话关掉就忘；装上它后，每个人格在本地维护自己的 Markdown 笔记，换新会话照样记得你的偏好、决定和项目进度。
           </p>
           <div class="hero-actions">
-            <a class="btn btn-primary btn-lg" href="#install">3 分钟上手</a>
-            <a class="btn btn-outline btn-lg" href="https://github.com/shinji00222/dsh-persona-continuity-bot" target="_blank" rel="noopener">查看源码</a>
+            <a class="btn btn-primary btn-lg" href="#install" data-i18n="hero.primary">3 分钟上手</a>
+            <a class="btn btn-outline btn-lg" href="https://github.com/shinji00222/dsh-persona-continuity-bot" target="_blank" rel="noopener" data-i18n="hero.secondary">查看源码</a>
           </div>
-          <p class="hero-meta">
+          <p class="hero-meta" data-i18n="hero.meta">
             MIT 开源，纯本地存储（无需 Git），已在 DSH 0.2.2-rc.3 验证。
           </p>
         </div>
@@ -50,7 +54,7 @@
           <div class="window-frame">
             <div class="window-bar">
               <span class="dot-group" aria-hidden="true"><i></i><i></i><i></i></span>
-              <span class="window-title">DeepSeek Harness — 实机演示</span>
+              <span class="window-title" data-i18n="hero.windowTitle">DeepSeek Harness — 实机演示</span>
               <span class="window-tag">v0.2.0-preview.17</span>
             </div>
             <img
@@ -68,31 +72,31 @@
     <section class="section section-tinted" id="showcase">
       <div class="container">
         <div class="section-head">
-          <h2>看看实际跑起来长什么样</h2>
-          <p>以下 5 张图均采集自本地隔离运行的 DSH 0.2.2-rc.3 与本插件实机界面。点下方标签直接切换场景。</p>
+          <h2 data-i18n="showcase.heading">看看实际跑起来长什么样</h2>
+          <p data-i18n="showcase.sub">以下 5 张图均采集自本地隔离运行的 DSH 0.2.2-rc.3 与本插件实机界面。点下方标签直接切换场景。</p>
         </div>
 
         <div class="showcase-shell">
           <div class="showcase-tabs" role="tablist" aria-label="实机界面场景切换">
             <button class="tab-btn is-active" role="tab" aria-selected="true" data-scene="picker">
-              <strong>普通模式选人格</strong>
-              <span>不进 Bot 模式也能跨会话续忆</span>
+              <strong data-i18n="scene.picker.tab">普通模式选人格</strong>
+              <span data-i18n="scene.picker.short">不进 Bot 模式也能跨会话续忆</span>
             </button>
             <button class="tab-btn" role="tab" aria-selected="false" data-scene="workbench">
-              <strong>人格工作台</strong>
-              <span>管设定、开关自动记忆、导入旧对话</span>
+              <strong data-i18n="scene.workbench.tab">人格工作台</strong>
+              <span data-i18n="scene.workbench.short">管设定、开关自动记忆、导入旧对话</span>
             </button>
             <button class="tab-btn" role="tab" aria-selected="false" data-scene="timeline">
-              <strong>私聊工作过程时间轴</strong>
-              <span>dot 查普通历史，步骤与耗时透明</span>
+              <strong data-i18n="scene.timeline.tab">私聊工作过程时间轴</strong>
+              <span data-i18n="scene.timeline.short">dot 查普通历史，步骤与耗时透明</span>
             </button>
             <button class="tab-btn" role="tab" aria-selected="false" data-scene="group">
-              <strong>微信直觉多人格群聊</strong>
-              <span>默认立即响应，多角色分工接话</span>
+              <strong data-i18n="scene.group.tab">微信直觉多人格群聊</strong>
+              <span data-i18n="scene.group.short">默认立即响应，多角色分工接话</span>
             </button>
             <button class="tab-btn" role="tab" aria-selected="false" data-scene="drawer">
-              <strong>群聊信息抽屉</strong>
-              <span>头像宫格、一键拉人、群设置与解散</span>
+              <strong data-i18n="scene.drawer.tab">群聊信息抽屉</strong>
+              <span data-i18n="scene.drawer.short">头像宫格、一键拉人、群设置与解散</span>
             </button>
           </div>
 
@@ -124,16 +128,16 @@
     <section class="section" id="memory">
       <div class="container memory-grid">
         <div class="memory-copy">
-          <h2>记忆就躺在本地 Markdown 里，随时翻看、随时改</h2>
-          <p>
+          <h2 data-i18n="memory.heading">记忆就躺在本地 Markdown 里，随时翻看、随时改</h2>
+          <p data-i18n-html="memory.lead">
             没有黑盒向量库，也不要求初始化 Git 仓库。每个人格按稳定 ID 存放在
             <code>$DSH_HOME/persona-continuity/memories/&lt;personaId&gt;/</code>
             下，用任意文本编辑器都能直接打开、编辑或删掉。
           </p>
           <ul class="clean-list">
-            <li><strong>自主提炼与去重</strong>：空闲时自动回顾新对话、修订旧结论并合并重复条目，也可按人格单独关闭自动记忆。</li>
-            <li><strong>按句召回与继续上次</strong>：新会话直接说「继续上次」，自动召回相关笔记并检索同工作区旧对话。</li>
-            <li><strong>自动脱敏</strong>：提炼入库前自动过滤 <code>sk-…</code>、<code>ghp_…</code>、<code>Bearer …</code> 等常见凭据格式。</li>
+            <li data-i18n-html="memory.b1"><strong>自主提炼与去重</strong>：空闲时自动回顾新对话、修订旧结论并合并重复条目，也可按人格单独关闭自动记忆。</li>
+            <li data-i18n-html="memory.b2"><strong>按句召回与继续上次</strong>：新会话直接说「继续上次」，自动召回相关笔记并检索同工作区旧对话。</li>
+            <li data-i18n-html="memory.b3"><strong>自动脱敏</strong>：提炼入库前自动过滤 <code>sk-…</code>、<code>ghp_…</code>、<code>Bearer …</code> 等常见凭据格式。</li>
           </ul>
         </div>
 
@@ -147,7 +151,7 @@
           <div class="explorer-viewer">
             <div class="explorer-header">
               <span id="mem-filename">MEMORY.md</span>
-              <span class="explorer-hint">纯本地文件 · 无需 Git</span>
+              <span class="explorer-hint" data-i18n="memory.hint">纯本地文件 · 无需 Git</span>
             </div>
             <pre><code id="mem-content"># 长期记忆索引（architect）
 
@@ -163,44 +167,44 @@
     <section class="section section-tinted" id="capabilities">
       <div class="container">
         <div class="section-head">
-          <h2>两种使用方式，按需选择</h2>
-          <p>只想要跨会话记忆就装纯插件包；想用多人格群聊和工作区协同，直接打合并包。</p>
+          <h2 data-i18n="cap.heading">两种使用方式，按需选择</h2>
+          <p data-i18n="cap.sub">只想要跨会话记忆就装纯插件包；想用多人格群聊和工作区协同，直接打合并包。</p>
         </div>
 
         <div class="mode-columns">
           <div class="mode-block">
             <div class="mode-head">
-              <h3>纯插件模式</h3>
-              <span class="mode-tag">轻巧独立</span>
+              <h3 data-i18n="cap.p.title">纯插件模式</h3>
+              <span class="mode-tag" data-i18n="cap.p.tag">轻巧独立</span>
             </div>
-            <p class="mode-summary">装进任意 DSH 0.2.x profile，直接在原生普通对话里使用。</p>
+            <p class="mode-summary" data-i18n="cap.p.summary">装进任意 DSH 0.2.x profile，直接在原生普通对话里使用。</p>
             <dl class="feature-dl">
-              <dt>普通会话直选人格</dt>
-              <dd>输入框旁新建、切换、右键重命名人格；已有普通会话也可绑定并自动提炼入库。</dd>
-              <dt>人格工作台管理</dt>
-              <dd>统一编辑人格设定、开关自动记忆、搜索与删改长期记忆，支持查看来源轮次。</dd>
-              <dt>从旧对话一键导入</dt>
-              <dd>选中未绑定或当前人格的历史会话导入记忆，后台排队提炼并自动去重。</dd>
-              <dt>严格范围隔离</dt>
-              <dd>不同人格按工作区隔离记忆；普通会话、子会话和无痕会话不写入、不注入。</dd>
+              <dt data-i18n="cap.p.t1">普通会话直选人格</dt>
+              <dd data-i18n="cap.p.d1">输入框旁新建、切换、右键重命名人格；已有普通会话也可绑定并自动提炼入库。</dd>
+              <dt data-i18n="cap.p.t2">人格工作台管理</dt>
+              <dd data-i18n="cap.p.d2">统一编辑人格设定、开关自动记忆、搜索与删改长期记忆，支持查看来源轮次。</dd>
+              <dt data-i18n="cap.p.t3">从旧对话一键导入</dt>
+              <dd data-i18n="cap.p.d3">选中未绑定或当前人格的历史会话导入记忆，后台排队提炼并自动去重。</dd>
+              <dt data-i18n="cap.p.t4">严格范围隔离</dt>
+              <dd data-i18n="cap.p.d4">不同人格按工作区隔离记忆；普通会话、子会话和无痕会话不写入、不注入。</dd>
             </dl>
           </div>
 
           <div class="mode-block">
             <div class="mode-head">
-              <h3>完整 Bot 合并包</h3>
-              <span class="mode-tag mode-tag-accent">全功能协同</span>
+              <h3 data-i18n="cap.b.title">完整 Bot 合并包</h3>
+              <span class="mode-tag mode-tag-accent" data-i18n="cap.b.tag">全功能协同</span>
             </div>
-            <p class="mode-summary">包含纯插件全部能力，额外提供侧栏频道、多人格群聊与工作区协同。</p>
+            <p class="mode-summary" data-i18n="cap.b.summary">包含纯插件全部能力，额外提供侧栏频道、多人格群聊与工作区协同。</p>
             <dl class="feature-dl">
-              <dt>私聊工作过程时间轴</dt>
-              <dd>dot 与其他人格私聊共用无框折叠时间轴，实时展示工具步骤、耗时与显式摘要；额度不足直接给中文提示。</dd>
-              <dt>主人格查普通 DSH 历史</dt>
-              <dd>唯一主人格（dot）在本地私聊里可只读搜索普通 DSH 对话记录，其他人格与群聊默认隔离。</dd>
-              <dt>微信直觉群聊与抽屉</dt>
-              <dd>默认立即响应并显示已收到人数；右上角展开群聊抽屉，头像宫格、一键拉人与解散群聊集中管理。</dd>
-              <dt>群聊「全体」工作区授权与细粒度权限</dt>
-              <dd>右侧工作区点「全体」一键授权给全群人格（可选允许写入）；右键人格单独开关浏览器与电脑控制；内置 6 个纯本地原创人格模板。</dd>
+              <dt data-i18n="cap.b.t1">私聊工作过程时间轴</dt>
+              <dd data-i18n="cap.b.d1">dot 与其他人格私聊共用无框折叠时间轴，实时展示工具步骤、耗时与显式摘要；额度不足直接给中文提示。</dd>
+              <dt data-i18n="cap.b.t2">主人格查普通 DSH 历史</dt>
+              <dd data-i18n="cap.b.d2">唯一主人格（dot）在本地私聊里可只读搜索普通 DSH 对话记录，其他人格与群聊默认隔离。</dd>
+              <dt data-i18n="cap.b.t3">微信直觉群聊与抽屉</dt>
+              <dd data-i18n="cap.b.d3">默认立即响应并显示已收到人数；右上角展开群聊抽屉，头像宫格、一键拉人与解散群聊集中管理。</dd>
+              <dt data-i18n="cap.b.t4">群聊「全体」工作区授权与细粒度权限</dt>
+              <dd data-i18n="cap.b.d4">右侧工作区点「全体」一键授权给全群人格（可选允许写入）；右键人格单独开关浏览器与电脑控制；内置 6 个纯本地原创人格模板。</dd>
             </dl>
           </div>
         </div>
@@ -211,45 +215,45 @@
     <section class="section" id="install">
       <div class="container install-wrap">
         <div class="section-head">
-          <h2>快速上手</h2>
-          <p>环境要求：DeepSeek Harness 0.2.x（桌面版或 Web 宿主）、Node.js ≥ 22.13（支持 <code>node:sqlite</code>）。</p>
+          <h2 data-i18n="inst.heading">快速上手</h2>
+          <p data-i18n-html="inst.sub">环境要求：DeepSeek Harness 0.2.x（桌面版或 Web 宿主）、Node.js ≥ 22.13（支持 <code>node:sqlite</code>）。</p>
         </div>
 
         <div class="install-switcher" role="tablist" aria-label="选择安装方式">
-          <button class="switch-btn is-active" role="tab" aria-selected="true" data-install="plugin">方式一：纯插件包</button>
-          <button class="switch-btn" role="tab" aria-selected="false" data-install="bundle">方式二：完整 Bot 合并包</button>
+          <button class="switch-btn is-active" role="tab" aria-selected="true" data-install="plugin" data-i18n="inst.tab1">方式一：纯插件包</button>
+          <button class="switch-btn" role="tab" aria-selected="false" data-install="bundle" data-i18n="inst.tab2">方式二：完整 Bot 合并包</button>
         </div>
 
         <div class="install-panel is-active" data-panel="plugin">
           <div class="code-box">
             <div class="code-head">
-              <span>克隆仓库并打包纯插件</span>
-              <button class="copy-btn" type="button" data-copy="git clone https://github.com/shinji00222/dsh-persona-continuity-bot.git&#10;cd dsh-persona-continuity-bot&#10;npm pack">复制命令</button>
+              <span data-i18n="inst.p.codeTitle">克隆仓库并打包纯插件</span>
+              <button class="copy-btn" type="button" data-copy="git clone https://github.com/shinji00222/dsh-persona-continuity-bot.git&#10;cd dsh-persona-continuity-bot&#10;npm pack" data-i18n="inst.copy">复制命令</button>
             </div>
             <pre><code>git clone https://github.com/shinji00222/dsh-persona-continuity-bot.git
 cd dsh-persona-continuity-bot
 npm pack</code></pre>
           </div>
           <ol class="steps-list">
-            <li>把生成的 <code>.tgz</code> 通过 DSH 插件管理器安装到目标 profile，重启即可。</li>
-            <li>在 DSH 左侧面板打开 <strong>「人格工作台」</strong>，或在普通会话输入框旁点「普通会话」新建并切换人格。</li>
-            <li>新开会话直接说「继续上次」，即可召回该人格的本地 Markdown 记忆。</li>
+            <li data-i18n-html="inst.p.s1">把生成的 <code>.tgz</code> 通过 DSH 插件管理器安装到目标 profile，重启即可。</li>
+            <li data-i18n-html="inst.p.s2">在 DSH 左侧面板打开 <strong>「人格工作台」</strong>，或在普通会话输入框旁点「普通会话」新建并切换人格。</li>
+            <li data-i18n-html="inst.p.s3">新开会话直接说「继续上次」，即可召回该人格的本地 Markdown 记忆。</li>
           </ol>
         </div>
 
         <div class="install-panel" data-panel="bundle">
           <div class="code-box">
             <div class="code-head">
-              <span>构建完整 Bot 合并包</span>
-              <button class="copy-btn" type="button" data-copy="npm run pack:tobs">复制命令</button>
+              <span data-i18n="inst.b.codeTitle">构建完整 Bot 合并包</span>
+              <button class="copy-btn" type="button" data-copy="npm run pack:tobs" data-i18n="inst.copy">复制命令</button>
             </div>
-            <pre><code># 先构建好 Bot 层桌面产物（默认位于 dist/continuity-desktop/）
+            <pre><code id="bundle-cmd"># 先构建好 Bot 层桌面产物（默认位于 dist/continuity-desktop/）
 npm run pack:tobs   # 可用 TOBS_DIST=&lt;目录&gt; 指定桌面产物位置</code></pre>
           </div>
           <ol class="steps-list">
-            <li>生成 <code>dist/dsh-persona-continuity-&lt;版本&gt;-with-tobs.tgz</code>，请保留同目录的依赖文件夹。</li>
-            <li>安装前请先从目标 profile 卸掉旧的同类 Bot 插件，避免重复加载。</li>
-            <li>插件 ID 不变，从纯插件切换到合并包后，已有人格和本地记忆全部照常保留。</li>
+            <li data-i18n-html="inst.b.s1">生成 <code>dist/dsh-persona-continuity-&lt;版本&gt;-with-tobs.tgz</code>，请保留同目录的依赖文件夹。</li>
+            <li data-i18n-html="inst.b.s2">安装前请先从目标 profile 卸掉旧的同类 Bot 插件，避免重复加载。</li>
+            <li data-i18n-html="inst.b.s3">插件 ID 不变，从纯插件切换到合并包后，已有人格和本地记忆全部照常保留。</li>
           </ol>
         </div>
       </div>
@@ -259,25 +263,25 @@ npm run pack:tobs   # 可用 TOBS_DIST=&lt;目录&gt; 指定桌面产物位置</
     <section class="section section-tinted" id="faq">
       <div class="container faq-wrap">
         <div class="section-head">
-          <h2>常见问题</h2>
+          <h2 data-i18n="faq.heading">常见问题</h2>
         </div>
 
         <div class="faq-list">
           <details open>
-            <summary>记忆存在哪里？会上传到外部服务器吗？</summary>
-            <p>不会上传。所有记忆都以纯 Markdown 存放在本地 <code>$DSH_HOME/persona-continuity/memories/&lt;personaId&gt;/</code>，无需 Git。提炼与召回只把必要正文发给当前会话配置的模型，插件本身不额外联网。</p>
+            <summary data-i18n="faq.q1">记忆存在哪里？会上传到外部服务器吗？</summary>
+            <p data-i18n-html="faq.a1">不会上传。所有记忆都以纯 Markdown 存放在本地 <code>$DSH_HOME/persona-continuity/memories/&lt;personaId&gt;/</code>，无需 Git。提炼与召回只把必要正文发给当前会话配置的模型，插件本身不额外联网。</p>
           </details>
           <details>
-            <summary>纯插件包和合并包怎么选？</summary>
-            <p>平时只用 DSH 原生界面、只需要跨会话人格记忆，选纯插件包最轻巧；想要完整的侧栏频道、私聊时间轴、微信直觉多人格群聊和工作区协同，直接打合并包。</p>
+            <summary data-i18n="faq.q2">纯插件包和合并包怎么选？</summary>
+            <p data-i18n="faq.a2">平时只用 DSH 原生界面、只需要跨会话人格记忆，选纯插件包最轻巧；想要完整的侧栏频道、私聊时间轴、微信直觉多人格群聊和工作区协同，直接打合并包。</p>
           </details>
           <details>
-            <summary>普通会话、子会话和无痕会话会被记住吗？</summary>
-            <p>不会。只有主动绑定了人格的会话才会提炼和召回记忆；未绑定的普通会话、子会话和无痕会话默认完全隔离。</p>
+            <summary data-i18n="faq.q3">普通会话、子会话和无痕会话会被记住吗？</summary>
+            <p data-i18n="faq.a3">不会。只有主动绑定了人格的会话才会提炼和召回记忆；未绑定的普通会话、子会话和无痕会话默认完全隔离。</p>
           </details>
           <details>
-            <summary>如何本地运行测试与验收？</summary>
-            <p>运行 <code>npm run check</code> 做语法检查、<code>npm test</code> 跑单元测试；功能验收建议使用隔离的 <code>DSH_HOME</code> 启动 profile，避免影响日常配置。</p>
+            <summary data-i18n="faq.q4">如何本地运行测试与验收？</summary>
+            <p data-i18n-html="faq.a4">运行 <code>npm run check</code> 做语法检查、<code>npm test</code> 跑单元测试；功能验收建议使用隔离的 <code>DSH_HOME</code> 启动 profile，避免影响日常配置。</p>
           </details>
         </div>
       </div>
@@ -287,13 +291,13 @@ npm run pack:tobs   # 可用 TOBS_DIST=&lt;目录&gt; 指定桌面产物位置</
   <footer class="site-footer">
     <div class="container footer-inner">
       <div>
-        <strong>人格续忆 Bot</strong>
+        <strong data-i18n="brand">人格续忆 Bot</strong>
         <p>DSH Persona Continuity Bot · MIT License</p>
       </div>
       <div class="footer-links">
-        <a href="https://github.com/shinji00222/dsh-persona-continuity-bot" target="_blank" rel="noopener">GitHub 仓库</a>
-        <a href="https://github.com/shinji00222/dsh-persona-continuity-bot/issues" target="_blank" rel="noopener">提交反馈</a>
-        <a href="#top">回到顶部</a>
+        <a href="https://github.com/shinji00222/dsh-persona-continuity-bot" target="_blank" rel="noopener" data-i18n="footer.repo">GitHub 仓库</a>
+        <a href="https://github.com/shinji00222/dsh-persona-continuity-bot/issues" target="_blank" rel="noopener" data-i18n="footer.issues">提交反馈</a>
+        <a href="#top" data-i18n="footer.top">回到顶部</a>
       </div>
     </div>
   </footer>
