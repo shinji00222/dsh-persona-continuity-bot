@@ -8,10 +8,11 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-71964a?style=flat-square)](LICENSE)
 [![DeepSeek Harness](https://img.shields.io/badge/built_for-DeepSeek_Harness-b8702f?style=flat-square)](https://github.com/deepseek-ai/deepseek-harness)
 [![version](https://img.shields.io/badge/version-0.2.0--preview.17-3d5afe?style=flat-square)](package.json)
+[![Website](https://img.shields.io/badge/website-online-2563eb?style=flat-square)](https://shinji00222.github.io/dsh-persona-continuity-bot/)
 
 **给 DeepSeek Harness 的每个人格一份独立的本地 Markdown 记忆，像熟悉的同事一样私聊、拉群、一起干活。**
 
-[核心能力](#features) · [界面一览](#screenshots) · [快速上手](#install) · [常见问题](#faq) · [数据与隐私](#privacy) · [开发](#dev)
+[项目官网](https://shinji00222.github.io/dsh-persona-continuity-bot/) · [核心能力](#features) · [界面一览](#screenshots) · [快速上手](#install) · [常见问题](#faq) · [数据与隐私](#privacy) · [开发](#dev)
 
 <br />
 
