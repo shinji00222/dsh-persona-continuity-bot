@@ -29,7 +29,7 @@ window.__ModuleLoader__.load({
       IconUserOutline16: 'IconListPenOutlineRegular',
     }).map(([id, legacy]) => [id, primitives[id] ?? primitives[legacy] ?? hiddenIcon]))
 
-    const base = '/api/persona-continuity'
+    const base = 'api/persona-continuity'
     const changedEvent = 'persona-continuity:changed'
     const normalOption = '__normal__'
     const createOption = '__create__'

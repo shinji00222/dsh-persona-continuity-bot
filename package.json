@@ -14,7 +14,8 @@
     "url": "https://github.com/shinji00222/dsh-persona-continuity-bot/issues"
   },
   "engines": {
-    "node": ">=22.13"
+    "node": ">=22.13",
+    "dsh": ">=0.2.2-rc.3 <0.4.0-0"
   },
   "description": "Per-persona cross-session Markdown memory and Tobs persona mode (DM, group chat, work-process timeline, primary persona history recall) for DeepSeek Harness.",
   "keywords": [
