@@ -272,3 +272,67 @@ test('recall applies soft penalty for missing digits and isolates workspace-scop
     store.close()
   }
 })
+
+test('addManual, dismissFailed, review retry cap, and prose-wrapped JSON extraction work reliably', async () => {
+  const store = new Store(':memory:')
+  try {
+    const p = store.savePersona('', '架构师', '')
+    const manualId = store.addManual(p, {
+      kind: 'preference',
+      title: '简洁输出',
+      summary: '先给结论再给细节',
+      detail: '所有技术回答先给一句话结论，再补充关键依据。',
+    })
+    const saved = store.detail(p, manualId)
+    assert.equal(saved.manual, true)
+    assert.equal(saved.kind, 'preference')
+    assert.equal(store.catalog(p, undefined, 16).some(item => item.id === manualId), true)
+
+    // Failed job dismiss & model override retry
+    store.bind('s1', p)
+    store.enqueue(job('s1', p, 1))
+    for (let i = 0; i < 3; i++) {
+      store.db.prepare('UPDATE jobs SET available = 0').run()
+      store.fail(store.nextJob())
+    }
+    assert.equal(store.importProgress(p).failed, 1)
+    assert.equal(store.retryFailed(p, { provider: 'new-p', model: 'new-m' }), 1)
+    const retried = store.nextJob()
+    assert.equal(retried.provider, 'new-p')
+    assert.equal(retried.model, 'new-m')
+    store.fail(retried)
+    for (let i = 0; i < 2; i++) {
+      store.db.prepare('UPDATE jobs SET available = 0').run()
+      store.fail(store.nextJob())
+    }
+    assert.equal(store.dismissFailed(p), 1)
+    assert.equal(store.importProgress(p).failed, 0)
+
+    // Review retry cap evicts chronically failing review sources after 3 failures
+    store.enqueue({ ...job('s1', p, 2), input: JSON.stringify({ user: '测试回顾来源文本', assistant: '好的' }) })
+    store.finish(store.nextJob(), [])
+    const due = Date.now() + 400000
+    for (let i = 0; i < 3; i++) {
+      const batch = store.nextReview(new Set(), due + i * 200000)
+      assert.ok(batch)
+      store.failReview(batch)
+    }
+    assert.equal(store.nextReview(new Set(), due + 900000), undefined)
+
+    // Prose-wrapped JSON output parses cleanly
+    const chattyLlm = { async *stream() {
+      yield { type: 'text-delta', text: '好的，以下是提炼出的记忆 JSON：\n```json\n[{"kind":"fact","topic":"db","title":"数据库","summary":"使用 SQLite","detail":"本地存储使用 SQLite","evidence":"确认使用 sqlite"}]\n```\n希望对你有帮助！' }
+      yield { type: 'finish', reason: { kind: 'stop' } }
+    } }
+    const parsed = await extract(
+      chattyLlm,
+      { ...job('s1', p), input: JSON.stringify({ user: '确认使用 sqlite', assistant: '好的' }) },
+      [],
+      new AbortController().signal,
+    )
+    assert.equal(parsed.length, 1)
+    assert.equal(parsed[0].topic, 'db')
+  } finally {
+    store.close()
+  }
+})

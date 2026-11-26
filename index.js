@@ -128,8 +128,9 @@ export function apply(ctx) {
           .catch(() => ({ status: 'unavailable' }))
       }
       const query = typeof args?.query === 'string' ? args.query.trim() : ''
+      const scopedWorkspace = linkedBotSessions.has(id) ? undefined : workspace
       if (!query) {
-        return { memories: store.catalog(persona.id, workspace, 16) }
+        return { memories: store.catalog(persona.id, scopedWorkspace, 16) }
       }
       const memories = store.search(persona.id, workspace, query, { scoped: !linkedBotSessions.has(id) }).slice(0, 6)
       const history = await retrieveHistory(ctx.sessionQuery, session.header, allowed, { query }, signal)
@@ -173,7 +174,8 @@ export function apply(ctx) {
             JSON.stringify({ result: turn.history.status, ...turn.history }),
           ].join('\n')
           const rows = turn?.recall ?? []
-          const catalog = turn?.catalog ?? readCatalog(persona.id, session.header?.cwd ?? '')
+          const scopedWorkspace = linkedBotSessions.has(id) ? undefined : (session.header?.cwd ?? '')
+          const catalog = turn?.catalog ?? readCatalog(persona.id, scopedWorkspace)
           if (!rows.length && !catalog.length) {
             return '当前人格暂无长期记忆。如需检索同人格同工作区的历史对话或代码片段，请调用 persona_recall 工具；严禁读取或解压 ~/.dsh/sessions/ 下的原始日志文件。未绑定到当前人格的会话不可访问。'
           }
@@ -258,11 +260,18 @@ export function apply(ctx) {
       }
       const started = Date.now()
       const signal = AbortSignal.any([lifetime.signal, AbortSignal.timeout(45000)])
-      const plan = await reviewMemories(ctx.llm, {
-        target: { model: source.model, provider: source.provider }, sessionId: source.session,
-        persona: store.persona(id), notes: candidates, sources: sources.map(({ session, turn, createdAt, text }) =>
-          ({ session, turn, createdAt, text })), consolidate: true,
-      }, signal)
+      const target = resolveModel(source.session) ?? { model: source.model, provider: source.provider }
+      let plan
+      try {
+        plan = await reviewMemories(ctx.llm, {
+          target, sessionId: source.session,
+          persona: store.persona(id), notes: candidates, sources: sources.map(({ session, turn, createdAt, text }) =>
+            ({ session, turn, createdAt, text })), consolidate: true,
+        }, signal)
+      } catch (error) {
+        if (!lifetime.signal.aborted) store.failReview(batch)
+        throw error
+      }
       signal.throwIfAborted()
       store.finishReview(batch, () => {
         applyReviewedChanges(id, plan.changes, started)
@@ -432,6 +441,7 @@ export function apply(ctx) {
     },
     autoMemory: (id, enabled) => store.setAutoMemory(id, enabled),
     list: (persona, query) => store.search(persona, '', query, { limit: 100 }),
+    addMemory: (persona, value) => ({ id: store.addManual(persona, value) }),
     edit: (persona, id, value) => store.edit(persona, id, value),
     forget: (persona, id, revision) => store.forget(persona, id, revision),
     async review(personaId, sessionId) {
@@ -540,9 +550,14 @@ export function apply(ctx) {
     importStatus: persona => store.importProgress(persona),
     retryFailed(persona = '') {
       const id = typeof persona === 'string' ? persona : ''
-      const retried = store.retryFailed(id)
+      const retried = store.retryFailed(id, resolveModel(''))
       if (retried > 0) queueMicrotask(drain)
       return { retried, ...store.importProgress(id) }
+    },
+    dismissFailed(persona = '') {
+      const id = typeof persona === 'string' ? persona : ''
+      const dismissed = store.dismissFailed(id)
+      return { dismissed, ...store.importProgress(id) }
     },
   }
 
@@ -633,7 +648,8 @@ export function apply(ctx) {
             ctx.logger.warn('persona memory recall is temporarily unavailable')
           }
         }
-        turn.catalog = readCatalog(turn.persona, agent.session.header?.cwd ?? '')
+        const sessionId = String(agent.session.id)
+        turn.catalog = readCatalog(turn.persona, linkedBotSessions.has(sessionId) ? undefined : (agent.session.header?.cwd ?? ''))
       }
     }
     return next()

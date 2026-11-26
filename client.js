@@ -99,6 +99,7 @@ window.__ModuleLoader__.load({
 .dpm_sourceRow{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 12px;border-radius:10px;background:var(--dsw-alias-bg-module-platform);min-width:0}
 .dpm_empty{margin:0;padding:20px 12px;text-align:center;font-size:13px;color:var(--dsw-alias-label-tertiary);border-radius:12px;border:0.5px dashed var(--dsw-alias-border-l3)}
 .dpm_pickerBtn{max-width:clamp(80px, 16vw, 168px);padding:0 10px;border-radius:18px}
+.dpm_select{box-sizing:border-box;height:36px;padding:0 10px;border-radius:8px;border:0.5px solid var(--dsw-alias-border-l4);background:var(--dsw-specific-input-major, var(--dsw-alias-bg-layer-1));color:var(--dsw-alias-label-primary);font:inherit;font-size:13px;outline:none}
 `
     const styleId = 'dsh-persona-continuity/styles'
     if (typeof document !== 'undefined' && document.querySelector('style[data-plugin-css=' + JSON.stringify(styleId) + ']') === null) {
@@ -181,8 +182,19 @@ window.__ModuleLoader__.load({
         failedJobsPrefix: '有 ',
         failedJobsSuffix: ' 条记忆后台提炼失败',
         retryFailed: '重试失败项',
+        dismissFailed: '清除失败项',
+        dismissedNotice: '已清除失败任务',
         retriedPrefix: '已重新排队 ',
         retriedSuffix: ' 条失败任务',
+        addMemory: '添加记忆',
+        addMemoryTitle: '手动添加长期记忆',
+        memoryKind: '类型',
+        kind_preference: '偏好',
+        kind_decision: '决定',
+        kind_fact: '事实',
+        kind_lesson: '经验',
+        kind_progress: '进度',
+        manualTag: '手动',
         createFirstHint: '先创建一个人格，即可开启跨会话记忆管理。',
         requestError: '无法读取人格记忆',
       },
@@ -257,8 +269,19 @@ window.__ModuleLoader__.load({
         failedJobsPrefix: '',
         failedJobsSuffix: ' background memory extraction(s) failed',
         retryFailed: 'Retry failed',
+        dismissFailed: 'Dismiss',
+        dismissedNotice: 'Cleared failed jobs',
         retriedPrefix: 'Re-queued ',
         retriedSuffix: ' failed job(s)',
+        addMemory: 'Add memory',
+        addMemoryTitle: 'Add long-term memory',
+        memoryKind: 'Type',
+        kind_preference: 'Preference',
+        kind_decision: 'Decision',
+        kind_fact: 'Fact',
+        kind_lesson: 'Lesson',
+        kind_progress: 'Progress',
+        manualTag: 'Manual',
         createFirstHint: 'Create a persona to start managing cross-session memories.',
         requestError: 'Unable to load persona memories',
       },
@@ -824,6 +847,68 @@ window.__ModuleLoader__.load({
       ))
     }
 
+    function AddMemoryModal({ personaId, open, onClose, onAdded, t }) {
+      const [kind, setKind] = useState('preference')
+      const [title, setTitle] = useState('')
+      const [summary, setSummary] = useState('')
+      const [detail, setDetail] = useState('')
+      const [busy, setBusy] = useState(false)
+      const [error, setError] = useState('')
+      const formId = useId()
+
+      useEffect(() => {
+        if (!open) return
+        setKind('preference')
+        setTitle('')
+        setSummary('')
+        setDetail('')
+        setError('')
+      }, [open, personaId])
+
+      async function submit(event) {
+        event.preventDefault()
+        if (busy) return
+        setBusy(true)
+        setError('')
+        try {
+          await call('/memory/add', { persona: personaId, kind, title, summary, detail })
+          onAdded()
+          onClose()
+        } catch (failure) {
+          setError(failure.message)
+        } finally {
+          setBusy(false)
+        }
+      }
+
+      return h(Modal, {
+        title: t('addMemoryTitle'), closeLabel: t('close'), open,
+        onClose: () => { if (!busy) onClose() },
+        footer: h(React.Fragment, null,
+          h(Button, { variant: 'outline', disabled: busy, onClick: onClose }, t('cancel')),
+          h(Button, { variant: 'primary', type: 'submit', form: formId, disabled: busy || !title.trim() || !summary.trim() || !detail.trim() }, t('saveMemory'))),
+      }, h('form', { id: formId, onSubmit: submit, style: { display: 'grid', gap: 10 } },
+        h('label', { className: 'dpm_field' },
+          h('span', { className: 'dpm_label' }, t('memoryKind')),
+          h('select', { className: 'dpm_select', value: kind, disabled: busy, onChange: event => setKind(event.target.value) },
+            ...['preference', 'decision', 'fact', 'lesson', 'progress'].map(item =>
+              h('option', { key: item, value: item }, t('kind_' + item))))),
+        h('label', { className: 'dpm_field' },
+          h('span', { className: 'dpm_label' }, t('memoryTitle')),
+          h(Input, { value: title, required: true, maxLength: 90, disabled: busy, onChange: event => setTitle(event.target.value) })),
+        h('label', { className: 'dpm_field' },
+          h('span', { className: 'dpm_label' }, t('summary')),
+          h(Input, { value: summary, required: true, maxLength: 160, disabled: busy, onChange: event => setSummary(event.target.value) })),
+        h('label', { className: 'dpm_field' },
+          h('span', { className: 'dpm_label' }, t('detail')),
+          h('textarea', {
+            className: 'dpm_textarea', rows: 5, maxLength: 1800, required: true, disabled: busy,
+            value: detail, onChange: event => setDetail(event.target.value),
+          })),
+        errorMessage(error, t),
+      ))
+    }
+
     function MemoryPanel({ id, t }) {
       const [query, setQuery] = useState('')
       const [rows, setRows] = useState(null)
@@ -832,6 +917,7 @@ window.__ModuleLoader__.load({
       const [revision, setRevision] = useState(0)
       const [error, setError] = useState('')
       const [importOpen, setImportOpen] = useState(false)
+      const [addOpen, setAddOpen] = useState(false)
       const [notice, setNotice] = useState('')
       const [polling, setPolling] = useState(false)
       const [failedCount, setFailedCount] = useState(0)
@@ -893,6 +979,21 @@ window.__ModuleLoader__.load({
         }
       }
 
+      async function dismissFailedJobs() {
+        if (retrying) return
+        setRetrying(true)
+        setError('')
+        try {
+          const result = await call('/jobs/dismiss', { persona: id })
+          setFailedCount(result.failed ?? 0)
+          setNotice(t('dismissedNotice'))
+        } catch (failure) {
+          setError(failure.message)
+        } finally {
+          setRetrying(false)
+        }
+      }
+
       const activeRow = rows?.find(row => row.id === selectedId) ?? null
 
       return h('div', { className: 'dpm_card' },
@@ -901,14 +1002,23 @@ window.__ModuleLoader__.load({
             h('h3', { className: 'dpm_cardTitle' }, t('index')),
             rows !== null && h(Tag, null, String(rows.length) + t('memoryCountSuffix')),
           ),
-          h(Button, { type: 'button', size: 'sm', variant: 'outline', onClick: () => setImportOpen(true) },
-            t('importHistory')),
+          h('div', { className: 'dpm_actions' },
+            h(Button, { type: 'button', size: 'sm', variant: 'outline', onClick: () => setAddOpen(true) },
+              h(IconPlusOutline16, { size: 14, 'aria-hidden': true }),
+              t('addMemory')),
+            h(Button, { type: 'button', size: 'sm', variant: 'outline', onClick: () => setImportOpen(true) },
+              t('importHistory')),
+          ),
         ),
         failedCount > 0 && h('div', { className: 'dpm_warnBanner', role: 'status' },
           h('span', null, t('failedJobsPrefix') + failedCount + t('failedJobsSuffix')),
-          h(Button, { type: 'button', size: 'sm', variant: 'outline', disabled: retrying, onClick: retryFailedJobs },
-            h(IconRefreshOutline16, { size: 14, 'aria-hidden': true }),
-            t('retryFailed'))),
+          h('div', { className: 'dpm_actions' },
+            h(Button, { type: 'button', size: 'sm', variant: 'outline', disabled: retrying, onClick: retryFailedJobs },
+              h(IconRefreshOutline16, { size: 14, 'aria-hidden': true }),
+              t('retryFailed')),
+            h(Button, { type: 'button', size: 'sm', variant: 'ghost', disabled: retrying, onClick: dismissFailedJobs },
+              t('dismissFailed')),
+          )),
         notice && h('p', { className: 'dpm_notice', role: 'status' }, notice),
         !activeRow && h(Input, {
           type: 'search', 'aria-label': t('search'), placeholder: t('search'), value: query, maxLength: 300,
@@ -933,8 +1043,10 @@ window.__ModuleLoader__.load({
             ),
             row.summary && h('p', { className: 'dpm_itemSummary' }, row.summary),
             h('div', { className: 'dpm_meta' },
+              row.kind && h(Tag, null, t('kind_' + row.kind)),
+              row.manual && h(Tag, null, t('manualTag')),
               (row.workspace || row.workspaceKey) && h(Tag, null, row.workspace || row.workspaceKey),
-              row.session && h('span', null, (row.sessionTitle || row.session) +
+              row.session && row.session !== 'manual' && h('span', null, (row.sessionTitle || row.session) +
                 (formatTurn(row, t) ? ' · ' + formatTurn(row, t) : '')),
               (row.updated ?? row.updatedAt) && h('span', null, formatTime(row.updated ?? row.updatedAt)),
             ))))
@@ -942,6 +1054,14 @@ window.__ModuleLoader__.load({
             h('p', { style: { margin: '0 0 4px' } }, t('empty')),
             h('p', { className: 'dpm_hint' }, t('emptyHint'))),
         errorMessage(error, t),
+        h(AddMemoryModal, {
+          personaId: id, open: addOpen, onClose: () => setAddOpen(false), t,
+          onAdded: () => {
+            setNotice(t('saved'))
+            setRevision(current => current + 1)
+            window.dispatchEvent(new Event(changedEvent))
+          },
+        }),
         h(HistoryImportModal, {
           id, t, open: importOpen, onClose: () => setImportOpen(false),
           onImported: result => {
@@ -981,8 +1101,24 @@ window.__ModuleLoader__.load({
         const load = (initial = false) => call('/state').then(value => {
           if (!live) return
           const list = value.personas ?? []
-          setPersonas(list)
-          if (initial && list.length) syncSelection(list, list[0].id)
+          setPersonas(prev => {
+            setId(currentId => {
+              if ((initial || !currentId) && list.length) {
+                const first = list[0]
+                setName(first.name ?? '')
+                setInstructions(first.instructions ?? '')
+                setAutoMemory(first.autoMemory ?? true)
+                return first.id
+              }
+              const oldItem = prev.find(item => item.id === currentId)
+              const newItem = list.find(item => item.id === currentId)
+              if (newItem && oldItem && oldItem.name !== newItem.name) {
+                setName(currName => currName === oldItem.name ? newItem.name : currName)
+              }
+              return currentId
+            })
+            return list
+          })
         }, failure => { if (live && initial) setError(failure.message) })
         void load(true)
         const onChanged = () => { void load(false) }
