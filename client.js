@@ -862,7 +862,10 @@ window.__ModuleLoader__.load({
         let live = true
         const timer = setTimeout(() => {
           call('/index' + persona + '&q=' + encodeURIComponent(query))
-            .then(value => { if (live) setRows(value) }, failure => { if (live) setError(failure.message) })
+            .then(
+              value => { if (live) { setError(''); setRows(value) } },
+              failure => { if (live) { setRows([]); setError(failure.message) } },
+            )
         }, 160)
         return () => { live = false; clearTimeout(timer) }
       }, [persona, query, revision])

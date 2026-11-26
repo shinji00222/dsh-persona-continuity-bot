@@ -50,7 +50,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "check": "node --check index.js && node --check client.js && node --check lib/store.js && node --check lib/local-memory.js && node --check lib/extract.js && node --check lib/web.js && node --check lib/history.js",
+    "check": "node --check index.js && node --check client.js && node --check lib/store.js && node --check lib/local-memory.js && node --check lib/extract.js && node --check lib/web.js && node --check lib/history.js && node --check lib/simulation.js && node --check scripts/pack-with-tobs.mjs",
     "test": "node --test",
     "pack:tobs": "node scripts/pack-with-tobs.mjs"
   },
