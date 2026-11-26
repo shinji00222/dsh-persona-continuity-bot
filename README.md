@@ -5,10 +5,13 @@
 <br />
 <br />
 
+[![npm](https://img.shields.io/npm/v/dsh-persona-continuity?style=flat-square&color=3d5afe)](https://www.npmjs.com/package/dsh-persona-continuity)
 [![License: MIT](https://img.shields.io/badge/license-MIT-71964a?style=flat-square)](LICENSE)
 [![DeepSeek Harness](https://img.shields.io/badge/built_for-DeepSeek_Harness-b8702f?style=flat-square)](https://github.com/deepseek-ai/deepseek-harness)
-[![version](https://img.shields.io/badge/version-0.2.0--preview.17-3d5afe?style=flat-square)](package.json)
 [![Website](https://img.shields.io/badge/website-online-2563eb?style=flat-square)](https://shinji00222.github.io/dsh-persona-continuity-bot/)
+[![Awesome DSH](https://img.shields.io/badge/listed_in-awesome--dsh--plugin-16a34a?style=flat-square)](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)
+
+**中文** | [English](README.en.md)
 
 **给 DeepSeek Harness 的每个人格一份独立的本地 Markdown 记忆，像熟悉的同事一样私聊、拉群、一起干活。**
 
@@ -76,7 +79,16 @@
 
 **环境要求**：DSH `0.2.x`（带 Web 客户端的桌面版或 Web 宿主）、Node.js `>= 22.13`（需支持 `node:sqlite`）。已在 DSH `0.2.2-rc.3` 验证。
 
-### 方式一：纯插件包（只要跨会话人格记忆）
+### 方式一：纯插件包（只要跨会话人格记忆，推荐一行命令直装）
+
+```bash
+dsh plugin --profile web add dsh-persona-continuity
+```
+
+装完重启对应 profile 即可使用（如使用自定义 profile，把 `web` 换成你的 profile 名）。
+
+<details>
+<summary>从源码手动打包安装</summary>
 
 ```bash
 git clone https://github.com/shinji00222/dsh-persona-continuity-bot.git
@@ -86,6 +98,8 @@ npm pack
 
 把生成的 `.tgz` 通过 DSH 插件管理器装进目标 profile，重启即可。
 
+</details>
+
 ### 方式二：合并包（人格续忆 + 完整 Bot 模式）
 
 装这一个包就够了。先构建好 Bot 层桌面产物（默认在 `dist/continuity-desktop/`），再在本仓库打包：
@@ -94,11 +108,11 @@ npm pack
 npm run pack:tobs   # 可用 TOBS_DIST=<目录> 指定桌面产物位置
 ```
 
-会生成 `dist/dsh-persona-continuity-<版本>-with-tobs.tgz`（同目录的 `dist/tobs-<版本>/` 为依赖目录，请保留）。
+会生成自包含的单文件包 `dist/dsh-persona-continuity-<版本>-with-tobs.tgz`，直接通过 DSH 插件管理器安装即可。
 
 > [!NOTE]
 > - 装合并包前请先从 profile 卸掉旧的同类 Bot 插件，避免重复加载。
-> - 合并包依赖本机同目录的 `dist/tobs-<版本>/`，仅限本机自建自用；跨设备分享请使用纯插件包。
+> - 合并包已通过 `bundleDependencies` 内置 Bot 层依赖，无本机路径依赖，可直接单文件安装或分享。
 > - 插件 ID 不变，切换方式后已有人格和记忆照常保留。
 
 ### 装好后怎么用

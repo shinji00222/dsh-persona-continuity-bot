@@ -4,7 +4,21 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>人格续忆 Bot — DeepSeek Harness 跨会话本地记忆插件</title>
-  <meta name="description" content="给 DeepSeek Harness 的每个人格一份独立的本地 Markdown 记忆，支持普通会话选人格、人格工作台、私聊工作过程时间轴与微信直觉多人格群聊。" />
+  <meta name="description" content="给 DeepSeek Harness 的每个人格一份独立的本地 Markdown 记忆，一行命令直装，支持普通会话选人格、人格工作台、私聊工作过程时间轴与多人格群聊。" />
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+  <link rel="canonical" href="https://shinji00222.github.io/dsh-persona-continuity-bot/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="DSH Persona Continuity Bot" />
+  <meta property="og:title" content="人格续忆 Bot — DeepSeek Harness 跨会话本地记忆插件" />
+  <meta property="og:description" content="给每个人格一份独立的本地 Markdown 记忆（无需 Git），一行命令安装，支持普通会话选人格、私聊时间轴与多人格群聊。" />
+  <meta property="og:url" content="https://shinji00222.github.io/dsh-persona-continuity-bot/" />
+  <meta property="og:image" content="https://shinji00222.github.io/dsh-persona-continuity-bot/og-card.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="DSH Persona Continuity Bot — Local Markdown Memory for DeepSeek Harness" />
+  <meta name="twitter:description" content="Independent local Markdown cross-session memory per persona (no Git required), one-line install via npm." />
+  <meta name="twitter:image" content="https://shinji00222.github.io/dsh-persona-continuity-bot/og-card.png" />
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
@@ -42,8 +56,19 @@
             运行在 DeepSeek Harness 里的开源插件。原生会话关掉就忘；装上它后，每个人格在本地维护自己的 Markdown 笔记，换新会话照样记得你的偏好、决定和项目进度。
           </p>
           <div class="hero-actions">
-            <a class="btn btn-primary btn-lg" href="#install" data-i18n="hero.primary">3 分钟上手</a>
+            <a class="btn btn-primary btn-lg" href="#install" data-i18n="hero.primary">一行命令安装</a>
             <a class="btn btn-outline btn-lg" href="https://github.com/shinji00222/dsh-persona-continuity-bot" target="_blank" rel="noopener" data-i18n="hero.secondary">查看源码</a>
+          </div>
+          <div class="hero-badges">
+            <a href="https://github.com/shinji00222/dsh-persona-continuity-bot/stargazers" target="_blank" rel="noopener">
+              <img src="https://img.shields.io/github/stars/shinji00222/dsh-persona-continuity-bot?style=flat-square&label=Stars&color=2563eb" alt="GitHub Stars" height="20" />
+            </a>
+            <a href="https://www.npmjs.com/package/dsh-persona-continuity" target="_blank" rel="noopener">
+              <img src="https://img.shields.io/npm/v/dsh-persona-continuity?style=flat-square&color=111318" alt="npm version" height="20" />
+            </a>
+            <a href="https://github.com/awesome-dsh-plugin/awesome-dsh-plugin" target="_blank" rel="noopener">
+              <img src="https://img.shields.io/badge/awesome--dsh--plugin-listed-16a34a?style=flat-square" alt="Listed in awesome-dsh-plugin" height="20" />
+            </a>
           </div>
           <p class="hero-meta" data-i18n="hero.meta">
             MIT 开源，纯本地存储（无需 Git），已在 DSH 0.2.2-rc.3 验证。
@@ -227,15 +252,13 @@
         <div class="install-panel is-active" data-panel="plugin">
           <div class="code-box">
             <div class="code-head">
-              <span data-i18n="inst.p.codeTitle">克隆仓库并打包纯插件</span>
-              <button class="copy-btn" type="button" data-copy="git clone https://github.com/shinji00222/dsh-persona-continuity-bot.git&#10;cd dsh-persona-continuity-bot&#10;npm pack" data-i18n="inst.copy">复制命令</button>
+              <span data-i18n="inst.p.codeTitle">一行命令从 npm 直接安装</span>
+              <button class="copy-btn" type="button" data-copy="dsh plugin --profile web add dsh-persona-continuity" data-i18n="inst.copy">复制命令</button>
             </div>
-            <pre><code>git clone https://github.com/shinji00222/dsh-persona-continuity-bot.git
-cd dsh-persona-continuity-bot
-npm pack</code></pre>
+            <pre><code>dsh plugin --profile web add dsh-persona-continuity</code></pre>
           </div>
           <ol class="steps-list">
-            <li data-i18n-html="inst.p.s1">把生成的 <code>.tgz</code> 通过 DSH 插件管理器安装到目标 profile，重启即可。</li>
+            <li data-i18n-html="inst.p.s1">运行上面一行命令后重启对应 profile 即可生效（自定义 profile 请把 <code>web</code> 换成你的 profile 名）。</li>
             <li data-i18n-html="inst.p.s2">在 DSH 左侧面板打开 <strong>「人格工作台」</strong>，或在普通会话输入框旁点「普通会话」新建并切换人格。</li>
             <li data-i18n-html="inst.p.s3">新开会话直接说「继续上次」，即可召回该人格的本地 Markdown 记忆。</li>
           </ol>
@@ -251,7 +274,7 @@ npm pack</code></pre>
 npm run pack:tobs   # 可用 TOBS_DIST=&lt;目录&gt; 指定桌面产物位置</code></pre>
           </div>
           <ol class="steps-list">
-            <li data-i18n-html="inst.b.s1">生成 <code>dist/dsh-persona-continuity-&lt;版本&gt;-with-tobs.tgz</code>，请保留同目录的依赖文件夹。</li>
+            <li data-i18n-html="inst.b.s1">生成自包含的单文件包 <code>dist/dsh-persona-continuity-&lt;版本&gt;-with-tobs.tgz</code>，可直接通过 DSH 插件管理器安装。</li>
             <li data-i18n-html="inst.b.s2">安装前请先从目标 profile 卸掉旧的同类 Bot 插件，避免重复加载。</li>
             <li data-i18n-html="inst.b.s3">插件 ID 不变，从纯插件切换到合并包后，已有人格和本地记忆全部照常保留。</li>
           </ol>
@@ -296,6 +319,7 @@ npm run pack:tobs   # 可用 TOBS_DIST=&lt;目录&gt; 指定桌面产物位置</
       </div>
       <div class="footer-links">
         <a href="https://github.com/shinji00222/dsh-persona-continuity-bot" target="_blank" rel="noopener" data-i18n="footer.repo">GitHub 仓库</a>
+        <a href="https://github.com/shinji00222/dsh-persona-continuity-bot/discussions" target="_blank" rel="noopener" data-i18n="footer.discussions">讨论区</a>
         <a href="https://github.com/shinji00222/dsh-persona-continuity-bot/issues" target="_blank" rel="noopener" data-i18n="footer.issues">提交反馈</a>
         <a href="#top" data-i18n="footer.top">回到顶部</a>
       </div>
