@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Build one portable, self-contained DSH package that ships persona continuity
+// Build one portable, self-contained DSH package that ships Persona Twin Bot
 // together with the Tobs Bot mode (no machine-local file: paths).
 //
 // The Tobs fork is built separately and leaves its packages in
@@ -8,7 +8,7 @@
 // @botharness/* packages inside node_modules/ via bundleDependencies, hoists
 // their public npm dependencies to top-level dependencies so pnpm/npm installs
 // platform-native binaries automatically on any machine, and packs the result
-// as dist/dsh-persona-continuity-<version>-with-tobs.tgz.
+// as dist/dsh-persona-twin-<version>-with-tobs.tgz.
 //
 // Override the Tobs build folder with TOBS_DIST=<dir>.
 import { execSync } from 'node:child_process'

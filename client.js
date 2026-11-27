@@ -1,5 +1,5 @@
 window.__ModuleLoader__.load({
-  id: 'dsh-persona-continuity',
+  id: 'dsh-persona-twin',
   factory(require) {
     const React = require('react')
     const { createElement: h, useEffect, useId, useState } = React
@@ -101,10 +101,10 @@ window.__ModuleLoader__.load({
 .dpm_pickerBtn{max-width:clamp(80px, 16vw, 168px);padding:0 10px;border-radius:18px}
 .dpm_select{box-sizing:border-box;height:36px;padding:0 10px;border-radius:8px;border:0.5px solid var(--dsw-alias-border-l4);background:var(--dsw-specific-input-major, var(--dsw-alias-bg-layer-1));color:var(--dsw-alias-label-primary);font:inherit;font-size:13px;outline:none}
 `
-    const styleId = 'dsh-persona-continuity/styles'
+    const styleId = 'dsh-persona-twin/styles'
     if (typeof document !== 'undefined' && document.querySelector('style[data-plugin-css=' + JSON.stringify(styleId) + ']') === null) {
       const tag = document.createElement('style')
-      tag.dataset.plugin = 'dsh-persona-continuity'
+      tag.dataset.plugin = 'dsh-persona-twin'
       tag.dataset.pluginCss = styleId
       tag.textContent = css
       document.head.appendChild(tag)
@@ -112,7 +112,7 @@ window.__ModuleLoader__.load({
 
     const dictionaries = {
       zh: {
-        title: '人格续忆',
+        title: '人格孪生',
         workspaceTitle: '人格工作台',
         normal: '普通会话',
         persona: '人格',
@@ -199,7 +199,7 @@ window.__ModuleLoader__.load({
         requestError: '无法读取人格记忆',
       },
       en: {
-        title: 'Persona Continuity',
+        title: 'Persona Twin',
         workspaceTitle: 'Persona Workspace',
         normal: 'Standard chat',
         persona: 'Persona',

@@ -28,9 +28,9 @@
   <circle cx="72" cy="57" r="4" fill="#d4844a"/>
   <text x="86" y="61" fill="#e2b087" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="11.5" font-weight="600" letter-spacing="0.8">DEEPSEEK HARNESS PLUGIN</text>
 
-  <text x="56" y="128" fill="#f4f5f7" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', sans-serif" font-size="44" font-weight="700" letter-spacing="1">人格续忆 Bot</text>
-  <text x="340" y="126" fill="#8b91a0" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="18" font-weight="500">DSH Persona Continuity</text>
-  <text x="56" y="172" fill="#c3c8d4" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', sans-serif" font-size="17.5">给每个人格一份独立的本地 Markdown 记忆，像熟悉的同事一样私聊、拉群、一起干活。</text>
+  <text x="56" y="128" fill="#f4f5f7" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', sans-serif" font-size="44" font-weight="700" letter-spacing="1">人格孪生 Bot</text>
+  <text x="340" y="126" fill="#8b91a0" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="18" font-weight="500">DSH Persona Twin Bot</text>
+  <text x="56" y="172" fill="#c3c8d4" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', sans-serif" font-size="17.5">构建带独立本地 Markdown 记忆的人格孪生，像熟悉的同事一样私聊、拉群、一起干活。</text>
 
   <g transform="translate(56, 200)">
     <rect x="0" y="0" width="144" height="30" rx="6" fill="#1d2028" stroke="#2f3442"/>
@@ -79,5 +79,5 @@
   </g>
 
   <text x="56" y="272" fill="#6e7485" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="11" letter-spacing="0.8">MIT / OPEN SOURCE · LOCAL-FIRST MARKDOWN MEMORY</text>
-  <text x="1144" y="272" text-anchor="end" fill="#8b91a0" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="11">github.com/shinji00222/dsh-persona-continuity-bot</text>
+  <text x="1144" y="272" text-anchor="end" fill="#8b91a0" font-family="ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace" font-size="11">github.com/shinji00222/dsh-persona-twin-bot</text>
 </svg>

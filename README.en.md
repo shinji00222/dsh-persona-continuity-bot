@@ -1,31 +1,31 @@
 <div align="center">
 
-<img src="docs/assets/banner.svg" alt="DSH Persona Continuity Bot" width="100%" />
+<img src="docs/assets/banner.svg" alt="DSH Persona Twin Bot" width="100%" />
 
 <br />
 <br />
 
-[![npm](https://img.shields.io/npm/v/dsh-persona-continuity?style=flat-square&color=3d5afe)](https://www.npmjs.com/package/dsh-persona-continuity)
+[![npm](https://img.shields.io/npm/v/dsh-persona-twin?style=flat-square&color=3d5afe)](https://www.npmjs.com/package/dsh-persona-twin)
 [![License: MIT](https://img.shields.io/badge/license-MIT-71964a?style=flat-square)](LICENSE)
 [![DeepSeek Harness](https://img.shields.io/badge/built_for-DeepSeek_Harness-b8702f?style=flat-square)](https://github.com/deepseek-ai/deepseek-harness)
-[![Website](https://img.shields.io/badge/website-online-2563eb?style=flat-square)](https://shinji00222.github.io/dsh-persona-continuity-bot/?lang=en)
+[![Website](https://img.shields.io/badge/website-online-2563eb?style=flat-square)](https://shinji00222.github.io/dsh-persona-twin-bot/?lang=en)
 [![Awesome DSH](https://img.shields.io/badge/listed_in-awesome--dsh--plugin-16a34a?style=flat-square)](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)
 
 [中文](README.md) | **English**
 
-**Independent local Markdown memory for every persona in DeepSeek Harness — chat, collaborate in groups, and pick up right where you left off.**
+**Build persistent persona twins with independent local Markdown memory in DeepSeek Harness — chat, collaborate in groups, and pick up right where you left off.**
 
-[Website](https://shinji00222.github.io/dsh-persona-continuity-bot/?lang=en) · [Features](#features) · [Screenshots](#screenshots) · [Quick Start](#install) · [FAQ](#faq) · [Privacy](#privacy) · [Development](#dev)
+[Website](https://shinji00222.github.io/dsh-persona-twin-bot/?lang=en) · [Features](#features) · [Screenshots](#screenshots) · [Quick Start](#install) · [FAQ](#faq) · [Privacy](#privacy) · [Development](#dev)
 
 <br />
 
-<img src="docs/demo.gif" width="840" alt="DSH Persona Continuity Bot demo: DM work timeline, multi-persona group chat, and group drawer" />
+<img src="docs/demo.gif" width="840" alt="DSH Persona Twin Bot demo: DM work timeline, multi-persona group chat, and group drawer" />
 
 </div>
 
 <br />
 
-Native sessions in [DeepSeek Harness (DSH)](https://github.com/deepseek-ai/deepseek-harness) are isolated and reset when closed. With this plugin, each persona keeps its own local Markdown memory directory (no Git required), remembering your preferences, decisions, and project progress across sessions.
+Native sessions in [DeepSeek Harness (DSH)](https://github.com/deepseek-ai/deepseek-harness) are isolated and reset when closed. With Persona Twin Bot, each persona keeps its own local Markdown memory directory (no Git required), accumulating preferences, decisions, and project context across sessions.
 
 Two ways to use it:
 - **Standalone Plugin**: Drop into DSH to use per-persona cross-session memory directly in native chats.
@@ -37,7 +37,7 @@ Two ways to use it:
 
 ### Standalone Plugin (Native DSH Chats)
 
-| What you want | How Persona Continuity helps |
+| What you want | How Persona Twin Bot helps |
 | --- | --- |
 | **Independent memory per persona** | Create, switch, or right-click rename personas beside the native DSH input; notes are stored by stable ID in local Markdown directories (no Git required) and stay isolated from unbound, sub-session, and incognito chats. |
 | **Stop repeating context** | Personas autonomously decide what to save or update, review idle sessions to deduplicate notes, and recall relevant memories + past workspace history when you say "continue from last time". |
@@ -79,7 +79,7 @@ Two ways to use it:
 ### Option 1: Standalone Plugin (One-Line Install via npm)
 
 ```bash
-dsh plugin --profile web add dsh-persona-continuity
+dsh plugin --profile web add dsh-persona-twin
 ```
 
 Restart the target profile to activate (replace `web` if using a custom profile).
@@ -88,8 +88,8 @@ Restart the target profile to activate (replace `web` if using a custom profile)
 <summary>Build & install from source</summary>
 
 ```bash
-git clone https://github.com/shinji00222/dsh-persona-continuity-bot.git
-cd dsh-persona-continuity-bot
+git clone https://github.com/shinji00222/dsh-persona-twin-bot.git
+cd dsh-persona-twin-bot
 npm pack
 ```
 
@@ -105,9 +105,11 @@ Build the Bot desktop bundle first (default: `dist/continuity-desktop/`), then p
 npm run pack:tobs   # Or set TOBS_DIST=<dir>
 ```
 
+Produces a self-contained tarball `dist/dsh-persona-twin-<version>-with-tobs.tgz` ready to install via DSH Plugin Manager.
+
 > [!NOTE]
 > - Uninstall any older standalone Bot plugin from the target profile before installing the bundle.
-> - Keep the sibling `dist/tobs-<version>/` folder alongside the generated `.tgz` (for local self-built use; share the standalone plugin across devices).
+> - Bot-layer dependencies are bundled via `bundleDependencies` with zero machine-local paths, so the single `.tgz` can be installed or shared directly.
 > - The plugin ID stays the same, so existing personas and local Markdown notes carry over seamlessly.
 
 <a id="faq"></a>
@@ -145,8 +147,8 @@ Verify interactively using an isolated `DSH_HOME` profile.
 
 <br />
 
-<a href="https://github.com/shinji00222/dsh-persona-continuity-bot">
-  <img src="docs/assets/star-cta.svg" alt="Star DSH Persona Continuity Bot on GitHub" width="100%" />
+<a href="https://github.com/shinji00222/dsh-persona-twin-bot">
+  <img src="docs/assets/star-cta.svg" alt="Star DSH Persona Twin Bot on GitHub" width="100%" />
 </a>
 
 ## License

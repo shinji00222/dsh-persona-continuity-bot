@@ -1,5 +1,5 @@
 {
-  "name": "dsh-persona-continuity",
+  "name": "dsh-persona-twin",
   "version": "0.2.0-preview.17",
   "type": "module",
   "publishConfig": {
@@ -7,21 +7,23 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/shinji00222/dsh-persona-continuity-bot.git"
+    "url": "https://github.com/shinji00222/dsh-persona-twin-bot.git"
   },
-  "homepage": "https://github.com/shinji00222/dsh-persona-continuity-bot#readme",
+  "homepage": "https://github.com/shinji00222/dsh-persona-twin-bot#readme",
   "bugs": {
-    "url": "https://github.com/shinji00222/dsh-persona-continuity-bot/issues"
+    "url": "https://github.com/shinji00222/dsh-persona-twin-bot/issues"
   },
   "engines": {
     "node": ">=22.13",
     "dsh": ">=0.2.2-rc.3 <0.4.0-0"
   },
-  "description": "Per-persona cross-session Markdown memory and Tobs persona mode (DM, group chat, work-process timeline, primary persona history recall) for DeepSeek Harness.",
+  "description": "Persistent persona twins with independent local Markdown memory and Bot collaboration mode (DM timeline, multi-persona group chat, primary persona history recall) for DeepSeek Harness.",
   "keywords": [
     "deepseek-harness",
     "dsh-plugin",
     "persona",
+    "persona-twin",
+    "digital-twin",
     "persona-memory",
     "agent-memory"
   ],

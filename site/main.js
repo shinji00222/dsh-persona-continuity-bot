@@ -1,16 +1,16 @@
 (() => {
   const i18n = {
     zh: {
-      pageTitle: '人格续忆 Bot — DeepSeek Harness 跨会话本地记忆插件',
-      brand: '人格续忆 Bot',
+      pageTitle: '人格孪生 Bot — DeepSeek Harness 本地记忆人格孪生插件',
+      brand: '人格孪生 Bot',
       'nav.showcase': '实机界面',
       'nav.memory': '本地记忆',
       'nav.capabilities': '核心能力',
       'nav.install': '快速上手',
       'nav.faq': '常见问题',
       'cta.installNow': '立即安装',
-      'hero.title': '给每个人格一份独立的本地 Markdown 记忆',
-      'hero.lead': '运行在 DeepSeek Harness 里的开源插件。原生会话关掉就忘；装上它后，每个人格在本地维护自己的 Markdown 笔记，换新会话照样记得你的偏好、决定和项目进度。',
+      'hero.title': '构建带独立本地 Markdown 记忆的人格孪生',
+      'hero.lead': '运行在 DeepSeek Harness 里的开源插件。原生会话关掉就忘；装上人格孪生 Bot 后，每个人格在本地维护自己的 Markdown 笔记，持续沉淀偏好、决定与项目进度，换新会话照样接着干。',
       'hero.primary': '一行命令安装',
       'hero.secondary': '查看源码',
       'hero.meta': 'MIT 开源，纯本地存储（无需 Git），已在 DSH 0.2.2-rc.3 验证。',
@@ -18,7 +18,7 @@
       'showcase.heading': '看看实际跑起来长什么样',
       'showcase.sub': '以下 5 张图均采集自本地隔离运行的 DSH 0.2.2-rc.3 与本插件实机界面。点下方标签直接切换场景。',
       'scene.picker.tab': '普通模式选人格',
-      'scene.picker.short': '不进 Bot 模式也能跨会话续忆',
+      'scene.picker.short': '不进 Bot 模式也能养出长期孪生',
       'scene.workbench.tab': '人格工作台',
       'scene.workbench.short': '管设定、开关自动记忆、导入旧对话',
       'scene.timeline.tab': '私聊工作过程时间轴',
@@ -69,7 +69,7 @@
       'inst.p.s1': '运行上面一行命令后重启对应 profile 即可生效（自定义 profile 请把 <code>web</code> 换成你的 profile 名）。',
       'inst.p.s2': '在 DSH 左侧面板打开 <strong>「人格工作台」</strong>，或在普通会话输入框旁点「普通会话」新建并切换人格。',
       'inst.p.s3': '新开会话直接说「继续上次」，即可召回该人格的本地 Markdown 记忆。',
-      'inst.b.s1': '生成自包含的单文件包 <code>dist/dsh-persona-continuity-&lt;版本&gt;-with-tobs.tgz</code>，可直接通过 DSH 插件管理器安装。',
+      'inst.b.s1': '生成自包含的单文件包 <code>dist/dsh-persona-twin-&lt;版本&gt;-with-tobs.tgz</code>，可直接通过 DSH 插件管理器安装。',
       'inst.b.s2': '安装前请先从目标 profile 卸掉旧的同类 Bot 插件，避免重复加载。',
       'inst.b.s3': '插件 ID 不变，从纯插件切换到合并包后，已有人格和本地记忆全部照常保留。',
       'faq.heading': '常见问题',
@@ -91,16 +91,16 @@
       bundleCmd: '# 先构建好 Bot 层桌面产物（默认位于 dist/continuity-desktop/）\nnpm run pack:tobs   # 可用 TOBS_DIST=<目录> 指定桌面产物位置',
     },
     en: {
-      pageTitle: 'DSH Persona Continuity Bot — Local Cross-Session Markdown Memory for DeepSeek Harness',
-      brand: 'Persona Continuity Bot',
+      pageTitle: 'DSH Persona Twin Bot — Persistent Persona Twins with Local Markdown Memory',
+      brand: 'Persona Twin Bot',
       'nav.showcase': 'Interface',
       'nav.memory': 'Local Memory',
       'nav.capabilities': 'Features',
       'nav.install': 'Quick Start',
       'nav.faq': 'FAQ',
       'cta.installNow': 'Install',
-      'hero.title': 'Independent local Markdown memory for every persona',
-      'hero.lead': 'An open-source plugin for DeepSeek Harness. Native chats reset when closed; with Persona Continuity, each persona maintains its own local Markdown notes and remembers your preferences, decisions, and project context across sessions.',
+      'hero.title': 'Persistent persona twins with independent local Markdown memory',
+      'hero.lead': 'An open-source plugin for DeepSeek Harness. Native chats reset when closed; with Persona Twin Bot, each persona maintains its own local Markdown notes and carries your preferences, decisions, and project context across sessions.',
       'hero.primary': 'Get Started',
       'hero.secondary': 'View Source',
       'hero.meta': 'MIT licensed, 100% local storage (no Git required), verified on DSH 0.2.2-rc.3.',
@@ -159,7 +159,7 @@
       'inst.p.s1': 'Run the command above and restart your target profile (replace <code>web</code> if using a custom profile).',
       'inst.p.s2': 'Open <strong>Persona Workbench</strong> from the left sidebar, or click the persona selector next to the standard chat input.',
       'inst.p.s3': 'In a new session, say "continue from last time" to recall that persona\'s local Markdown memory.',
-      'inst.b.s1': 'Produces a self-contained tarball <code>dist/dsh-persona-continuity-&lt;version&gt;-with-tobs.tgz</code> ready to install via DSH Plugin Manager.',
+      'inst.b.s1': 'Produces a self-contained tarball <code>dist/dsh-persona-twin-&lt;version&gt;-with-tobs.tgz</code> ready to install via DSH Plugin Manager.',
       'inst.b.s2': 'Uninstall any older standalone Bot plugin from the target profile first to avoid duplicate loading.',
       'inst.b.s3': 'The plugin ID stays the same, so all existing personas and local Markdown notes carry over seamlessly.',
       'faq.heading': 'FAQ',
@@ -434,7 +434,7 @@ source: session-07 / turn-4
       } else {
         showingGif = true;
         imgEl.src = './media/demo.gif';
-        imgEl.alt = currentLang === 'zh' ? '人格续忆 Bot 完整动态演示' : 'Persona Continuity Bot animated demo';
+        imgEl.alt = currentLang === 'zh' ? '人格孪生 Bot 完整动态演示' : 'Persona Twin Bot animated demo';
         winTitleEl.textContent = i18n[currentLang].gifTitle;
         gifBtn.textContent = i18n[currentLang].toggleToShot;
       }

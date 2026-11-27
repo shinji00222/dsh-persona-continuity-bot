@@ -1,31 +1,31 @@
 <div align="center">
 
-<img src="docs/assets/banner.svg" alt="人格续忆 Bot — DSH Persona Continuity Bot" width="100%" />
+<img src="docs/assets/banner.svg" alt="人格孪生 Bot — DSH Persona Twin Bot" width="100%" />
 
 <br />
 <br />
 
-[![npm](https://img.shields.io/npm/v/dsh-persona-continuity?style=flat-square&color=3d5afe)](https://www.npmjs.com/package/dsh-persona-continuity)
+[![npm](https://img.shields.io/npm/v/dsh-persona-twin?style=flat-square&color=3d5afe)](https://www.npmjs.com/package/dsh-persona-twin)
 [![License: MIT](https://img.shields.io/badge/license-MIT-71964a?style=flat-square)](LICENSE)
 [![DeepSeek Harness](https://img.shields.io/badge/built_for-DeepSeek_Harness-b8702f?style=flat-square)](https://github.com/deepseek-ai/deepseek-harness)
-[![Website](https://img.shields.io/badge/website-online-2563eb?style=flat-square)](https://shinji00222.github.io/dsh-persona-continuity-bot/)
+[![Website](https://img.shields.io/badge/website-online-2563eb?style=flat-square)](https://shinji00222.github.io/dsh-persona-twin-bot/)
 [![Awesome DSH](https://img.shields.io/badge/listed_in-awesome--dsh--plugin-16a34a?style=flat-square)](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)
 
 **中文** | [English](README.en.md)
 
-**给 DeepSeek Harness 的每个人格一份独立的本地 Markdown 记忆，像熟悉的同事一样私聊、拉群、一起干活。**
+**在 DeepSeek Harness 里构建带独立本地 Markdown 记忆的人格孪生，像熟悉的同事一样私聊、拉群、一起干活。**
 
-[项目官网](https://shinji00222.github.io/dsh-persona-continuity-bot/) · [核心能力](#features) · [界面一览](#screenshots) · [快速上手](#install) · [常见问题](#faq) · [数据与隐私](#privacy) · [开发](#dev)
+[项目官网](https://shinji00222.github.io/dsh-persona-twin-bot/) · [核心能力](#features) · [界面一览](#screenshots) · [快速上手](#install) · [常见问题](#faq) · [数据与隐私](#privacy) · [开发](#dev)
 
 <br />
 
-<img src="docs/demo.gif" width="840" alt="人格续忆 Bot 演示：私聊工作过程时间轴、微信直觉群聊与群聊信息抽屉" />
+<img src="docs/demo.gif" width="840" alt="人格孪生 Bot 演示：私聊工作过程时间轴、微信直觉群聊与群聊信息抽屉" />
 
 </div>
 
 <br />
 
-[DeepSeek Harness（DSH）](https://github.com/deepseek-ai/deepseek-harness) 的原生会话彼此独立，关掉就忘。装上这个插件后，每个人格都有自己独立的本地 Markdown 记忆目录（无需 Git），换新会话照样记得你的偏好、决定和项目进度。
+[DeepSeek Harness（DSH）](https://github.com/deepseek-ai/deepseek-harness) 的原生会话彼此独立，关掉就忘。装上人格孪生 Bot 后，每个人格都有自己独立的本地 Markdown 记忆目录（无需 Git），持续沉淀偏好、决定和项目进度，换新会话照样接着干。
 
 支持两种用法：
 - **纯插件模式**：直接装进 DSH，在普通会话里用多人格跨会话记忆。
@@ -34,11 +34,11 @@
 <a id="features"></a>
 
 <br />
-<img src="docs/assets/section-01.svg" alt="01 核心能力 · 跨会话记忆与 Bot 增强" width="100%" />
+<img src="docs/assets/section-01.svg" alt="01 核心能力 · 人格孪生记忆与 Bot 协同" width="100%" />
 
-### 纯插件自带：普通会话也能跨会话续忆
+### 纯插件自带：普通会话也能养出长期人格孪生
 
-| 你想要 | 人格续忆 Bot 怎么帮你 |
+| 你想要 | 人格孪生 Bot 怎么帮你 |
 | --- | --- |
 | **每个人格都有独立记忆** | 在普通 DSH 输入框旁直接选人格或新建人格；笔记按稳定 ID 存在本地 Markdown 目录（无需 Git），随时翻看、改写或删除；普通会话、子会话与无痕会话完全隔离。 |
 | **不用反复交代背景** | 人格自主决定记什么、更新什么，空闲时自动回顾新对话并合并重复笔记；新会话说一句「继续上次」，即可按句召回记忆并翻查同工作区旧对话。 |
@@ -82,7 +82,7 @@
 ### 方式一：纯插件包（只要跨会话人格记忆，推荐一行命令直装）
 
 ```bash
-dsh plugin --profile web add dsh-persona-continuity
+dsh plugin --profile web add dsh-persona-twin
 ```
 
 装完重启对应 profile 即可使用（如使用自定义 profile，把 `web` 换成你的 profile 名）。
@@ -91,8 +91,8 @@ dsh plugin --profile web add dsh-persona-continuity
 <summary>从源码手动打包安装</summary>
 
 ```bash
-git clone https://github.com/shinji00222/dsh-persona-continuity-bot.git
-cd dsh-persona-continuity-bot
+git clone https://github.com/shinji00222/dsh-persona-twin-bot.git
+cd dsh-persona-twin-bot
 npm pack
 ```
 
@@ -100,7 +100,7 @@ npm pack
 
 </details>
 
-### 方式二：合并包（人格续忆 + 完整 Bot 模式）
+### 方式二：合并包（人格孪生 + 完整 Bot 模式）
 
 装这一个包就够了。先构建好 Bot 层桌面产物（默认在 `dist/continuity-desktop/`），再在本仓库打包：
 
@@ -108,7 +108,7 @@ npm pack
 npm run pack:tobs   # 可用 TOBS_DIST=<目录> 指定桌面产物位置
 ```
 
-会生成自包含的单文件包 `dist/dsh-persona-continuity-<版本>-with-tobs.tgz`，直接通过 DSH 插件管理器安装即可。
+会生成自包含的单文件包 `dist/dsh-persona-twin-<版本>-with-tobs.tgz`，直接通过 DSH 插件管理器安装即可。
 
 > [!NOTE]
 > - 装合并包前请先从 profile 卸掉旧的同类 Bot 插件，避免重复加载。
@@ -120,7 +120,7 @@ npm run pack:tobs   # 可用 TOBS_DIST=<目录> 指定桌面产物位置
 从 DSH 左侧面板打开 **「人格工作台」**，可新建人格、改设定和管理记忆：
 
 1. **选人格**：新会话输入框旁点「普通会话」，选一个人格或「＋ 新建人格」（右键可重命名）；已有普通会话也可直接绑定到某个人格并自动提炼入库。
-2. **改设定与看记忆**：在 **「设置 → 人格续忆」** 里编辑人格设定、查看或删掉某条记忆，也可按人格单独关闭自动记忆。
+2. **改设定与看记忆**：在 **「人格工作台」**（或 **「设置 → 人格孪生」**）里编辑人格设定、查看或删掉某条记忆，也可按人格单独关闭自动记忆。
 3. **接上上次的活**：新开会话直接说「继续上次」，或按主题让它翻阅同工作区的历史对话。
 
 <a id="faq"></a>
@@ -172,7 +172,7 @@ npm test        # 单元测试
 | `lib/history.js` | 旧对话检索与范围隔离 |
 | `lib/web.js` | 复用 DSH 鉴权的管理路由 |
 | `test/` | `node:test` 单元测试 |
-| `scripts/pack-with-tobs.mjs` | 打包人格续忆 + 完整 Bot 模式合并包 |
+| `scripts/pack-with-tobs.mjs` | 打包人格孪生 + 完整 Bot 模式合并包 |
 
 相关文档：[技术调研](docs/research.md) · [项目规划](docs/project-plan.md) · [开发记录](docs/development-log.md)
 
@@ -180,7 +180,7 @@ npm test        # 单元测试
 
 <br />
 
-<a href="https://github.com/shinji00222/dsh-persona-continuity-bot">
+<a href="https://github.com/shinji00222/dsh-persona-twin-bot">
   <img src="docs/assets/star-cta.svg" alt="觉得顺手？给项目点一颗 Star" width="100%" />
 </a>
 
