@@ -7,7 +7,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/shinji00222/dsh-persona-twin-bot.git"
+    "url": "git+https://github.com/shinji00222/dsh-persona-twin-bot.git"
   },
   "homepage": "https://github.com/shinji00222/dsh-persona-twin-bot#readme",
   "bugs": {
